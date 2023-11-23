@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('bill', function (Blueprint $table) {
             $table->id('bill_id');
+            $table->foreignId('payment_id');
+            $table->foreign('payment_id')->references('id')->on('payment')->onDelete('cascade');
             $table->string('fee_type');
             $table->string('payer');
             $table->decimal('fee', 10, 2);
@@ -36,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bills');
+        Schema::dropIfExists('bill');
     }
 };

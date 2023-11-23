@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('refund', function (Blueprint $table) {
             $table->id('refund_id');
-            $table->foreignId('payment_id')->constrained('payment');
+            $table->foreignId('payment_id');
+            $table->foreign('payment_id')->references('id')->on('payment')->onDelete('cascade');
             $table->decimal('amount', 10, 2);
             $table->timestamps();
         });

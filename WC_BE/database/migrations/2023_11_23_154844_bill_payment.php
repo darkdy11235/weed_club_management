@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('bill_payment', function (Blueprint $table) {
-            $table->id      (); // Auto-incrementing primary key
+            $table->id          ('bill_payment_id'); // Auto-incrementing primary key
             $table->foreignId('payment_id');
-            $table->foreign ('payment_id')   ->references("id") ->on('payment');;
-            $table->decimal ('amount');
+            $table->foreign('payment_id')->references('id')->on('payment')->onDelete('cascade');
+            $table->decimal     ('amount');
         });
     }
 
