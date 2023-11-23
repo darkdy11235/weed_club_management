@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('bill_payment', function (Blueprint $table) {
-            $table->id      ("bill_id"); // Auto-incrementing primary key
-            $table->foreign ('payment_id')   ->references("payment_id") ->on('payment');;
+            $table->id      (); // Auto-incrementing primary key
+            $table->foreignId('payment_id');
+            $table->foreign ('payment_id')   ->references("id") ->on('payment');;
             $table->decimal ('amount');
         });
     }
