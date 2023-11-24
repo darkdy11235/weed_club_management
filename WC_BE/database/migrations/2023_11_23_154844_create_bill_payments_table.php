@@ -8,7 +8,7 @@ class CreateBillPaymentsTable extends Migration
 {
     public function up()
     {
-        Schema::create('bill_payment', function (Blueprint $table) {
+        Schema::create('bill_payments', function (Blueprint $table) {
             $table->id(); // Auto-incrementing primary key
             $table->foreignId('payment_id');
             $table->decimal('amount');
@@ -22,6 +22,6 @@ class CreateBillPaymentsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('bill_payment');
+        Schema::dropIfExists('bill_payments');
     }
 };
