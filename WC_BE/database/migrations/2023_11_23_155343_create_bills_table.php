@@ -4,19 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateBillsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        Schema::create('bill', function (Blueprint $table) {
-            $table->id('bill_id');
+        Schema::create('bills', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('payment_id');
-            $table->foreign('payment_id')->references('id')->on('payment')->onDelete('cascade');
             $table->string('fee_type');
             $table->string('payer');
             $table->decimal('fee', 10, 2);
@@ -26,18 +20,16 @@ return new class extends Migration
             $table->string('month');
             $table->string('year');
             $table->text('description')->nullable();
-            $table->string('column9')->nullable();
-            // Thêm các cột khác tùy thuộc vào yêu cầu cụ thể của bạn
+
+            $table->foreign('payment_id')
+                    ->references('id')
+                    ->on('payments')
+                    ->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        Schema::dropIfExists('bill');
+        Schema::dropIfExists('bills');
     }
 };

@@ -32,13 +32,3 @@ class CreateUsersTable extends Migration
         Schema::dropIfExists('users');
     }
 }
-
-
-/*
-    step1: 
-        create file: php artisan make:migration user
-    step2: 
-        edit(docs: https://laravel.com/docs/8.x/migrations)
-    step3: 
-        test migrate: php artisan migrate
-*/
