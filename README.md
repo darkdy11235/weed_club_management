@@ -5,7 +5,9 @@
 > 2. Change Info file .env
 >
 > 3. php artisan migrate
+
+> 5. php artisan db:seed
 >
-> 4. php artisan serve
+> 6. php artisan serve
 
 ![alt text](https://i.giphy.com/media/bGgsc5mWoryfgKBx1u/giphy.webp)

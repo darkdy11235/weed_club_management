@@ -10,7 +10,6 @@ class CreateBillsTable extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('payment_id');
             $table->string('fee_type');
             $table->string('payer');
             $table->decimal('fee', 10, 2);
@@ -21,10 +20,7 @@ class CreateBillsTable extends Migration
             $table->string('year');
             $table->text('description')->nullable();
 
-            $table->foreign('payment_id')
-                    ->references('id')
-                    ->on('payments')
-                    ->onDelete('cascade');
+           
         });
     }
 
