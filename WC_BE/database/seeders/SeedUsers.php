@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str; // Add this line for generating random strings
 
-class SeedUser extends Seeder
+class SeedUsers extends Seeder
 {
     public function run()
     {
