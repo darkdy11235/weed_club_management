@@ -19,6 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call(SeedPermissions::class);
         $this->call(SeedRoles::class);
         $this->call(SeedUserRoles::class);
+        $this->call(SeedPayments::class);
+        $this->call(SeedRefunds::class);
+        $this->call(SeedBills::class);
+        $this->call(SeedBillPayments::class);
     }
 }
 

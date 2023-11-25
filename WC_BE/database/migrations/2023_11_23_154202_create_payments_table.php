@@ -11,7 +11,6 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->string('payment_intent_id')->nullable();
             $table->string('pay_account')->nullable();
             $table->string('pay_method');
             $table->string('account_name');

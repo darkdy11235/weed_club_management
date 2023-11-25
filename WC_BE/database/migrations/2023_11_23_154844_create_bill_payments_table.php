@@ -9,13 +9,18 @@ class CreateBillPaymentsTable extends Migration
     public function up()
     {
         Schema::create('bill_payments', function (Blueprint $table) {
-            $table->id(); // Auto-incrementing primary key
+            // $table->id(); // Auto-incrementing primary key
+            $table->foreignId('bill_id');
             $table->foreignId('payment_id');
             $table->decimal('amount');
 
             $table->foreign('payment_id')
                     ->references('id')
                     ->on('payments')
+                    ->onDelete('cascade');
+            $table->foreign('bill_id')
+                    ->references('id')
+                    ->on('bills')
                     ->onDelete('cascade');
         });
     }
