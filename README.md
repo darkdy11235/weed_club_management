@@ -1,7 +1,8 @@
-
+<a name="readme-top"></a>
 <div style="text-align:center">
     <img src="https://i.giphy.com/media/bGgsc5mWoryfgKBx1u/giphy.webp" alt="Alt Text">
 </div>
+
 <div align="center">
   <h1 align="center">Weed Club Management</h1>
 </div>
@@ -27,11 +28,9 @@
   </ol>
 </details>
 
-
-
+<a name="about-the-project"></a>
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
 Welcome to the **Weed Club Management** system! This project is a collaborative effort aimed at creating an efficient and comprehensive solution for managing activities related to a weed club.
 
 Features:
@@ -46,9 +45,8 @@ Features:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
+<a name="built-with"></a>
 ### Built With
-
 * [![Laravel][Laravel.com]][Laravel-url]
 * [![Vue][Vue.js]][Vue-url]
 
@@ -58,14 +56,14 @@ Features:
 
 
 <!-- GETTING STARTED -->
+<a name="getting-started"></a>
 ## Getting Started
-
 These instructions will help you get a copy of the project up and running on your local machine.
 
+<a name="prerequisites"></a>
 ### Prerequisites
 
 #### Backend
-
 Before you begin, ensure you have met the following requirements:
 
 - [PHP](https://www.php.net/) version 8.0.2 or higher
@@ -81,9 +79,8 @@ Before you begin, ensure you have met the following requirements:
 - [Nuxt.js](https://nuxtjs.org/) version 3.8.1
 - [axios](https://axios-http.com/) version 1.5.1
 - [tailwindcss](https://tailwindcss.com/) version 3.3.5
-
+<a name="installation"></a>
 ### Installation
-
 1. Clone the repository:
 
     ```bash
@@ -147,6 +144,7 @@ Before you begin, ensure you have met the following requirements:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
+<a name="contributing"></a>
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
