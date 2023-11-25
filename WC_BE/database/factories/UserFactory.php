@@ -19,13 +19,7 @@ class UserFactory extends Factory
             'phone' => $this->faker->phoneNumber,
             'address' => $this->faker->address,
             'email' => $this->faker->unique()->safeEmail,
-            'password' => bcrypt('123456789'),
-            'salt' => '',
-            'avatar' => $this->faker->imageUrl(),
-            'remember_token' => '',
-            'password_reset_token' => '',
-            'created_by' => '',
-            'status' => 'active',
+            'password' => bcrypt('123456789')
         ];
     }
 }
