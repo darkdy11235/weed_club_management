@@ -30,10 +30,5 @@ class DatabaseSeeder extends Seeder
         Bill::factory(20)->create();
         BillPayment::factory(20)->create();
         Refund::factory(20)->create();
-        // $this->call(SeedUserRoles::class);
-        // $this->call(SeedPayments::class);
-        // $this->call(SeedRefunds::class);
-        // $this->call(SeedBills::class);
-        // $this->call(SeedBillPayments::class);
     }
 }
