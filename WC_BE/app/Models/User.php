@@ -29,7 +29,7 @@ class User extends Authenticatable
         'remember_token',
         'password_reset_token',
         'created_by',
-        'status',
+        'status'
     ];
 
     /**
@@ -39,7 +39,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
+        'remember_token'
     ];
 
     /**
@@ -48,6 +48,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_verified_at' => 'datetime'
     ];
 }

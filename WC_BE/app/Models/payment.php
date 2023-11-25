@@ -21,7 +21,7 @@ class Payment extends Model
         'account_name',
         'account_number',
         'amount_money',
-        'description',
+        'description'
     ];
 
     /**

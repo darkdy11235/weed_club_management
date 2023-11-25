@@ -22,6 +22,6 @@ class Bill extends Model
         'bill_at',
         'month',
         'year',
-        'description',
+        'description'
     ];
 }

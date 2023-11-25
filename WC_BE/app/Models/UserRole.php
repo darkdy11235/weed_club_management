@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserRole extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
     /**
      * The attributes that are mass assignable.
@@ -16,7 +17,7 @@ class UserRole extends Model
      */
     protected $fillable = [
         'user_id',
-        'role_id',
+        'role_id'
     ];
 
     /**
