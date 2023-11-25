@@ -5,7 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class bill extends Model
+class Bill extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'fee_type',
+        'payer',
+        'fee',
+        'created_by',
+        'bill_at',
+        'month',
+        'year',
+        'description',
+    ];
 }
