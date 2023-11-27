@@ -9,10 +9,15 @@ use App\Http\Controllers\API\UserRoleController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\RolePermissionController;
 use App\Http\Controllers\API\PermissionController;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\API\ForgotPasswordController;
+use App\Http\Controllers\API\ResetPasswordController;
 
 // Public routes
 Route::post('/register', [RegistrationController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
+Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('/password/reset', [ResetPasswordController::class, 'resetPassword']);
 
 // Protected routes with authentication middleware
 Route::middleware(['auth:sanctum'])->group(function () {

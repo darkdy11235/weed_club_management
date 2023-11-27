@@ -83,7 +83,7 @@ class DatabaseSeeder extends Seeder
             'gender' => 'Male',
             'phone' => '098765671',
             'address' => '44 thanh long',
-            'email' => 'admin@example.com',
+            'email' => 'htk11235@gmail.com',
             'password' => bcrypt('admin@example.com'),
         ]);
         
