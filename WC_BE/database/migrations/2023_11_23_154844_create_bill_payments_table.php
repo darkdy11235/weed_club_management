@@ -13,6 +13,7 @@ class CreateBillPaymentsTable extends Migration
             $table->foreignId('bill_id');
             $table->foreignId('payment_id');
             $table->decimal('amount');
+            $table->timestamps();
 
             $table->foreign('payment_id')
                     ->references('id')

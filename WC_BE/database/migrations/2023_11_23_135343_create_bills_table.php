@@ -13,12 +13,12 @@ class CreateBillsTable extends Migration
             $table->string('fee_type');
             $table->string('payer');
             $table->decimal('fee', 10, 2);
-            $table->timestamps();
-            $table->date('bill_at');
+            $table->datetime('bill_at');
             $table->string('month');
             $table->string('year');
             $table->text('description')->nullable();
             $table->string('created_by');
+            $table->timestamps();
         });
     }
 

@@ -9,10 +9,17 @@ class CreatePermissionsTable extends Migration
     public function up()
     {
         Schema::create('permissions', function (Blueprint $table) {
-            $table->id(); // Auto-incrementing primary key
-            $table->string('permission_name');
-            $table->timestamps(); // Created at and Updated at timestamps
+            $table->id();
+            $table->string('name');
+            $table->string('slug');
+            $table->string('description');
+            $table->boolean('create')->default(false);
+            $table->boolean('read')->default(false);
+            $table->boolean('update')->default(false);
+            $table->boolean('delete')->default(false);
+            $table->timestamps();
         });
+
     }
     public function down()
     {

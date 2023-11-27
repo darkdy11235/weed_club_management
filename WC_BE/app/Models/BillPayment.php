@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class BillPayment extends Model
 {
     use HasFactory;
-    public $timestamps = false;
     
     protected $fillable = [
         'bill_id',
