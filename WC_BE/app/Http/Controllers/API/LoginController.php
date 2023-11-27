@@ -14,21 +14,30 @@ class LoginController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+        ], [
+            'email.required' => 'Email is required',
+            'email.email' => 'Invalid email format',
+            'password.required' => 'Password is required',
         ]);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            throw ValidationException::withMessages(['email' => 'Invalid credentials']);
+        try {
+            if (Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
+                $user = Auth::user();
+                $token = $user->createToken('api-token')->plainTextToken;
+
+                return response()->json(['token' => $token]);
+            } else {
+                throw ValidationException::withMessages(['error' => 'Invalid credentials']);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        $token = $request->user()->createToken('api-token')->plainTextToken;
-
-        return response()->json(['token' => $token]);
     }
 
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
+
         return response()->json(['message' => 'Successfully logged out']);
     }
 }
-

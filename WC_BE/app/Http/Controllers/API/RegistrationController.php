@@ -54,7 +54,7 @@ class RegistrationController extends Controller
 
             $token = $user->createToken('api-token')->plainTextToken;
 
-            return response()->json(['token' => $token])->setName('api.token');
+            return response()->json(['token' => $token]);
         } catch (QueryException $e) {
             if ($e->errorInfo[1] == 1062) {
                 // MySQL error code for unique constraint violation
