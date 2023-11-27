@@ -20,6 +20,10 @@ class UserController extends Controller
         return response()->json(['user' => $user]);
     }
 
+    
+    
+
+
     /**
      * Logout the authenticated user.
      *
