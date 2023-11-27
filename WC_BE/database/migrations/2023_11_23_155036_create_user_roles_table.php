@@ -13,6 +13,8 @@ class CreateUserRolesTable extends Migration
             $table->foreignId('role_id');
             $table->timestamps();
 
+            $table->unique(['user_id', 'role_id']);
+
             // Foreign key relationships
             $table->foreign('user_id')
                     ->references('id')
