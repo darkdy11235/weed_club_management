@@ -10,14 +10,8 @@ class CreateRolesTable extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id('id'); // Auto-incrementing primary key
-            $table->foreignId('permission_id');
+            $table->string('role_name');
             $table->timestamps(); // Created at and Updated at timestamps
-
-            // Foreign key relationship with the permissions table
-            $table->foreign('permission_id')
-                  ->references('id')
-                  ->on('permissions')
-                  ->onDelete('cascade'); // Delete related permissions if a role is deleted
         });
     }
 

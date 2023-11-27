@@ -7,6 +7,8 @@ use App\Http\Controllers\API\RegistrationController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\TestTroller;
 
+
+//user
 Route::post('/register', [RegistrationController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
 
@@ -26,4 +28,3 @@ Route::prefix('bill')->group(function(){
 
 Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'getUser']);
 Route::middleware('auth:sanctum')->post('/logout', [UserController::class, 'logout']);
-
