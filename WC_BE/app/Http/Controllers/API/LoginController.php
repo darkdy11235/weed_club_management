@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\QueryException;
 
 class LoginController extends Controller
 {
     public function login(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
         ], [
@@ -19,6 +21,11 @@ class LoginController extends Controller
             'email.email' => 'Invalid email format',
             'password.required' => 'Password is required',
         ]);
+
+        if ($validator->fails()) {
+            // Return validation errors as JSON
+            return response()->json(['error' => $validator->errors()], 400);
+        }
 
         try {
             if (Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
@@ -29,6 +36,14 @@ class LoginController extends Controller
             } else {
                 throw ValidationException::withMessages(['error' => 'Invalid credentials']);
             }
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] == 1062) {
+                // MySQL error code for unique constraint violation
+                return response()->json(['error' => 'Duplicate entry. The provided data violates a unique constraint.'], 400);
+            }
+
+            // Handle other query exceptions or rethrow for unhandled cases
+            return response()->json(['error' => 'An error occurred while processing your request.'], 500);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

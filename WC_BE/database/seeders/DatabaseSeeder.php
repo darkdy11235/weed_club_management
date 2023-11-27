@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(20)->create();
+        
         Permission::insert([
             ['name' => 'Create Bill Payment', 'slug' => 'create_bill_payment', 'description' => 'Permission to create a new bill payment', 'create' => true, 'read' => false, 'update' => false, 'delete' => false],
             ['name' => 'Read Bill Payment', 'slug' => 'read_bill_payment', 'description' => 'Permission to view bill payment details', 'create' => false, 'read' => true, 'update' => false, 'delete' => false],
@@ -65,6 +65,11 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Delete User', 'slug' => 'delete_user', 'description' => 'Permission to delete a user', 'create' => false, 'read' => false, 'update' => false, 'delete' => true],
 
             ['name' => 'Assign User Roles', 'slug' => 'assign_user_roles', 'description' => 'Permission to assign roles to a user', 'create' => true, 'read' => true, 'update' => true, 'delete' => true],
+
+            ['name' => 'Create Permission', 'slug' => 'create_permission', 'description' => 'Permission to create a new permission', 'create' => true, 'read' => false, 'update' => false, 'delete' => false],
+            ['name' => 'Read Permission', 'slug' => 'read_permission', 'description' => 'Permission to view permission details', 'create' => false, 'read' => true, 'update' => false, 'delete' => false],
+            ['name' => 'Update Permission', 'slug' => 'update_permission', 'description' => 'Permission to update an existing permission', 'create' => false, 'read' => false, 'update' => true, 'delete' => false],
+            ['name' => 'Delete Permission', 'slug' => 'delete_permission', 'description' => 'Permission to delete a permission', 'create' => false, 'read' => false, 'update' => false, 'delete' => true],
         ]);
 
         Role::insert([
@@ -72,7 +77,24 @@ class DatabaseSeeder extends Seeder
             ['role_name' => 'User']
         ]);
 
-        UserRole::factory(20)->create();
+        User::create([
+            'name' => 'admin',
+            'age' => '30',
+            'gender' => 'Male',
+            'phone' => '098765671',
+            'address' => '44 thanh long',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('admin@example.com'),
+        ]);
+        
+        UserRole::create([
+            'user_id' => 1,
+            'role_id' => 1
+        ]);
+
+        User::factory(20)->create();
+
+        //UserRole::factory(20)->create();
 
         Payment::factory(20)->create();
 
@@ -97,7 +119,6 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
-        BillPayment::factory(20)->create();
 
         Refund::factory(20)->create();
 
@@ -142,6 +163,11 @@ class DatabaseSeeder extends Seeder
             ['role_id' => 1, 'permission_id' => 29], // Delete User
 
             ['role_id' => 1, 'permission_id' => 30], // Assign User Roles
+
+            ['role_id' => 1, 'permission_id' => 31], // Create Permission
+            ['role_id' => 1, 'permission_id' => 32], // Read Permission
+            ['role_id' => 1, 'permission_id' => 33], // Update Permission
+            ['role_id' => 1, 'permission_id' => 34], // Delete Permission
 
             // User role permissions
             ['role_id' => 2, 'permission_id' => 6], // Read Bill

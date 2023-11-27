@@ -15,6 +15,8 @@ class CreateBillPaymentsTable extends Migration
             $table->decimal('amount');
             $table->timestamps();
 
+            $table->unique(['bill_id', 'payment_id']);
+
             $table->foreign('payment_id')
                     ->references('id')
                     ->on('payments')
