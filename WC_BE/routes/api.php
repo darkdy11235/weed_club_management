@@ -7,12 +7,21 @@ use App\Http\Controllers\API\RegistrationController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\TestTroller;
 
-
-//user
+// User Public routes
 Route::post('/register', [RegistrationController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
-Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'getUser']);
-Route::middleware('auth:sanctum')->post('/logout', [UserController::class, 'logout']);
+
+// User Protected routes
+Route::middleware(['auth:sanctum'])->group(function () {
+    // User routes
+    Route::get('/user', [UserController::class, 'show']);
+    Route::put('/user/update', [UserController::class, 'update']);
+    Route::post('/user/update', [UserController::class, 'updateAvatar']);
+    Route::put('/user/change-password', [UserController::class, 'changePassword']);
+    
+    // Logout route
+    Route::post('/logout', [LoginController::class, 'logout']);
+});
 
 
 Route::prefix('payment')->group(function () {
