@@ -15,19 +15,29 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/vue-fontawesome": "^3.0.3",
+    "@invictus.codes/nuxt-vuetify": "^0.3.0",
     "@nuxt/devtools": "latest",
-    "nuxt": "^3.8.1",
-    "vue": "^3.3.8",
-    "vue-router": "^4.2.5"
+    "@nuxtjs/vuetify": "^1.12.3",
+    "autoprefixer": "^10.4.16",
+    "nuxt": "^3.7.4",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.3",
+    "vite-plugin-vuetify": "^1.0.2",
+    "vue": "^3.3.4",
+    "vue-email": "^0.7.2",
+    "vue-router": "^4.2.5",
+    "vuetify": "^3.3.21",
+    "vuetify-nuxt-module": "^0.5.13"
   },
   "dependencies": {
-    "@invictus.codes/nuxt-vuetify": "^0.3.0",
+    "@kyvg/vue3-notification": "^3.0.2",
+    "@mdi/font": "^7.3.67",
     "@pinia/nuxt": "^0.5.1",
-    "autoprefixer": "^10.4.16",
     "axios": "^1.5.1",
+    "dotenv": "^16.3.1",
+    "js-cookie": "^3.0.5",
     "pinia": "^2.1.7",
-    "postcss": "^8.4.31",
-    "tailwindcss": "^3.3.5",
+    "vue-jwt-decode": "^0.1.0",
     "vue-toastification": "^2.0.0-rc.5"
   }
 }

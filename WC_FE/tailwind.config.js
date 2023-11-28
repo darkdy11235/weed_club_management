@@ -6,7 +6,7 @@ module.exports = {
     "./pages/**/*.vue",
     "./plugins/**/*.{js,ts}",
     "./app.vue",
-  ],  
+  ],
   theme: {
     extend: {
       margin: {
