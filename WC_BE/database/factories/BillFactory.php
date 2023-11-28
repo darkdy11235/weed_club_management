@@ -20,6 +20,7 @@ class BillFactory extends Factory
             'month' => $this->faker->word,
             'year' => $this->faker->numberBetween(2022, 2023),
             'description' => $this->faker->sentence,
+
         ];
     }
 }
