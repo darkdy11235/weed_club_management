@@ -32,9 +32,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     // Logout route
     Route::post('/logout', [LoginController::class, 'logout']);
-
-    // IsAdmin routes
-    Route::get('/isAdmin', [UserController::class, 'isAdmin']);
+    
     // Routes for managing users
     Route::get('/users', [UserController::class, 'index'])
     ->middleware('checkPermission:read_user');

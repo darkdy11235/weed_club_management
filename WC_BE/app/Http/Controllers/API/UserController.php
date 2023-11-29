@@ -17,7 +17,10 @@ class UserController extends Controller
     public function show(Request $request)
     {
         $user = $request->user();
-        return response()->json(['user' => $user]);
+        $roles = $user->getAllRoles();
+        $userData = $user->toArray();
+        $userData['roles'] = $roles;
+        return response()->json(['user' => $userData]);
     }
 
     public function update(Request $request)
@@ -320,22 +323,6 @@ class UserController extends Controller
         } catch (QueryException $e) {
             // Handle other query exceptions or rethrow for unhandled cases
             return response()->json(['error' => 'An error occurred while processing your request.'], 500);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function isAdmin(Request $request)
-    {
-        try {
-            $user = $request->user();
-
-            // Check if the user has the 'admin' role
-            if ($user->hasAnyRole(['Admin'])) {
-                return response()->json(['isAdmin' => true]);
-            } else {
-                return response()->json(['isAdmin' => false]);
-            }
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
