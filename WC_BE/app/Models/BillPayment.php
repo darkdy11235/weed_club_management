@@ -11,8 +11,7 @@ class BillPayment extends Model
     
     protected $fillable = [
         'bill_id',
-        'payment_id',
-        'amount'
+        'payment_id'
     ];
 
     // Add relationships if necessary
