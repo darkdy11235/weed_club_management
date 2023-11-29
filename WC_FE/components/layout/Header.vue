@@ -4,10 +4,30 @@ import Popup from './Popup.vue';
 
 export default defineComponent({
   setup() {
+    const store = useSidebarStore();
+    const { toggleMenu } = store;
+    const is_expanded = computed(() => store.is_expanded);
 
+    const showLogout = ref(false)
+    const isOpen = ref(false)
+    const clickShow = () => {
+      isOpen.value = !isOpen.value
+    }
+    const router = useRouter()
+    const accessToken = localStorage.getItem('accessToken')
+    const isLogin = computed(() => Boolean(accessToken.value))
+
+    const logout = () => {
+      if (isLogin) {
+        localStorage.removeItem('accessToken')
+        router.push("/")
+      }
+    }
+
+    return { is_expanded, toggleMenu, showLogout, clickShow, logout, isLogin, Popup, isOpen }
   },
   mounted() {
-
+    this.getUserInfo();
   },
   data() {
     return {
@@ -16,9 +36,11 @@ export default defineComponent({
   },
   methods: {
     getUserInfo() {
-
+      const user = userInfo();
+      user.setUserInfo();
+      this.userInfo = user.$state.userInfo;
+      console.log(this.userInfo);
     }
-
   }
 });
 </script>
