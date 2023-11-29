@@ -56,4 +56,13 @@ class BillController extends Controller
             return response()->json($error, 401);
         }
     }
+
+    public function getPaidBillsByUserId($userId){
+        try {
+            $result = Bill::getPaidBillsByUserId($userId);
+            return response()->json($result, 200);
+        } catch (\Exception $error) {
+            return response()->json($error, 401);
+        }
+    }
 }
