@@ -1,11 +1,9 @@
-<template>
-    <div>
 
-    </div>
-  </template>
-  
-  <script>
-  export default {
-  
-  }
-  </script>
+
+<template>
+  <div>
+    <NuxtLayout name="admin">
+      <NuxtPage />
+    </NuxtLayout>
+  </div>
+</template>
