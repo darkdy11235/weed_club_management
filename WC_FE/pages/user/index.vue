@@ -1,8 +1,8 @@
 <script setup>
 
   import axios from "axios";
-  import Cookies from 'js-cookie';
-  import { notify } from '@kyvg/vue3-notification';
+//   import Cookies from 'js-cookie';
+//   import { notify } from '@kyvg/vue3-notification';
 
   import UserCard from "~/components/UserCard.vue";
   import SearchItem from "~/components/SearchItem.vue";
@@ -55,7 +55,7 @@
   const onDelete = (id) => {
       closeAllPopup();
       axios 
-          .delete(`${API_BE}/api/v1/users/${id}`)
+          .delete(`${API_BE}/api/user/${id}`)
           .then((response) => {
           notify({
               title: "Delete Success",
@@ -77,7 +77,7 @@
 
   const fetchData = async () => {
       try {
-          const response = await axios.get(`${API_BE}/api/v1/users`);
+          const response = await axios.get(`${API_BE}/api/user`);
           return userData.value = response.data;
       }
       catch (error) {
@@ -118,7 +118,7 @@
 
   const editUser = (id) => {
       closeAllPopup();
-      router.push(`/admin/users/${id}`);
+      router.push(`/admin/user/${id}`);
   };
   const addUser = () => {
     //   console.log(authStore.isAuth);
