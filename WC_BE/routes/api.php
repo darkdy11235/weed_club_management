@@ -14,6 +14,7 @@ use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\API\ResetPasswordController;
 
 // Public routes
+
 Route::post('/register', [RegistrationController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
@@ -21,6 +22,8 @@ Route::post('/password/reset', [ResetPasswordController::class, 'resetPassword']
 
 // Protected routes with authentication middleware
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/payment/create-intent', [PaymentController::class, 'createPaymentIntent']);
+    Route::post('/payment/webhook', [PaymentController::class, 'stripeWebhook']);
     // User routes
     Route::get('/user', [UserController::class, 'show']);
     Route::put('/user/update', [UserController::class, 'update']);

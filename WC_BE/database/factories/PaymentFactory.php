@@ -20,7 +20,8 @@ class PaymentFactory extends Factory
             'account_name' => $this->faker->name,
             'account_number' => $this->faker->randomNumber(6),
             'amount_money' => $this->faker->randomFloat(2, 10, 1000),
-            'description' => $this->faker->sentence
+            'description' => $this->faker->sentence,
+            'status' => "paid"
         ];
     }
 }
