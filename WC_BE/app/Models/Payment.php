@@ -111,6 +111,10 @@ class Payment extends Model
 
         return $result;
     }
+    
+    public static function getPaidBills($userId){
+        
+    }
 
     public function bills()
     {
