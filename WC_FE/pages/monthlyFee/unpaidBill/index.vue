@@ -65,102 +65,103 @@
       </div>
   </NuxtLayout>
 </template>
+
 <script>
 import axios from 'axios';
 // import useDecodeTokenStore from '@/stores/decodeToken';
 export default {
-    mounted() {
-        const accessToken = localStorage.getItem('accessToken');
-        const base64Url = accessToken.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(
-            atob(base64)
-                .split('')
-                .map(function (c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                })
-                .join('')
-        );
-        const user = JSON.parse(jsonPayload);
-        console.log(user.idUser);
-        this.userId = user.idUser;
-        this.getUnpaidBill(user.idUser);
-    },
-    data() {
-        return {
-            // unpaidBills: [],
-            searchQuery: '',
-            payment: [],
-            currentPage: 1,
-            itemsPerPage: 8,
-            unpaidBills: [],
-            userId: null,
-        }
-    },
-    methods: {
-        async getUnpaidBill(id) {
-            try {
-                const response = await axios.get(`${this.$config.public.API_BASE_BE}/api/v1/payment/get-unpaid-bill/${id}`);
-                console.log(response);
-                if (response.status === 200) {
-                    this.unpaidBills = response.data.unpaidBills;
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        paidBill(payer) {
-            console.log(payer)
-        },
-        addPayment(event, bill_id, description, price, month) {
-            if (event.target.checked) {
-                this.payment.push({
-                    bill_id,
-                    description,
-                    price: parseInt(price),
-                    month
-                });
-            } else {
-                const paymentIndex = this.payment.findIndex(item => item.bill_id === bill_id);
-                if (paymentIndex !== -1) {
-                    this.payment.splice(paymentIndex, 1);
-                }
-            }
-        },
-        async createPayment() {
-            try {
-                const response = await axios.post(`${this.$config.public.API_BASE_BE}/api/v1/payment/stripe-checkout`, {
-                    "user_id": this.userId,
-                    "description": "Thanh toán tiền tháng",
-                    "items": this.payment,
-                });
-                console.log(response);
-                if (response.status === 200) {
-                    this.payment = [];
-                    window.location.href = response.data;
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    },
-    computed: {
-        filteredUnpaidBills() {
-            return this.unpaidBills.filter((unpaidBill) => {
-                return unpaidBill.fee_type.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                    unpaidBill.description.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                    unpaidBill.unpaid_fee.toString().includes(this.searchQuery.toLowerCase())
-            })
-        },
-        totalPages() {
-            return Math.ceil(this.unpaidBills.length / this.itemsPerPage);
-        },
-        paginatedList() {
-            const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-            const endIndex = startIndex + this.itemsPerPage;
-            return this.filteredUnpaidBills.slice(startIndex, endIndex);
-        }
-    }
+  mounted() {
+      const accessToken = localStorage.getItem('accessToken');
+      const base64Url = accessToken.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+          atob(base64)
+              .split('')
+              .map(function (c) {
+                  return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+              })
+              .join('')
+      );
+      const user = JSON.parse(jsonPayload);
+      console.log(user.idUser);
+      this.userId = user.idUser;
+      this.getUnpaidBill(user.idUser);
+  },
+  data() {
+      return {
+          // unpaidBills: [],
+          searchQuery: '',
+          payment: [],
+          currentPage: 1,
+          itemsPerPage: 8,
+          unpaidBills: [],
+          userId: null,
+      }
+  },
+  methods: {
+      async getUnpaidBill(id) {
+          try {
+              const response = await axios.get(`${this.$config.public.API_BASE_BE}/api/v1/payment/get-unpaid-bill/${id}`);
+              console.log(response);
+              if (response.status === 200) {
+                  this.unpaidBills = response.data.unpaidBills;
+              }
+          } catch (error) {
+              console.log(error);
+          }
+      },
+      paidBill(payer) {
+          console.log(payer)
+      },
+      addPayment(event, bill_id, description, price, month) {
+          if (event.target.checked) {
+              this.payment.push({
+                  bill_id,
+                  description,
+                  price: parseInt(price),
+                  month
+              });
+          } else {
+              const paymentIndex = this.payment.findIndex(item => item.bill_id === bill_id);
+              if (paymentIndex !== -1) {
+                  this.payment.splice(paymentIndex, 1);
+              }
+          }
+      },
+      async createPayment() {
+          try {
+              const response = await axios.post(`${this.$config.public.API_BASE_BE}/api/v1/payment/stripe-checkout`, {
+                  "user_id": this.userId,
+                  "description": "Thanh toán tiền tháng",
+                  "items": this.payment,
+              });
+              console.log(response);
+              if (response.status === 200) {
+                  this.payment = [];
+                  window.location.href = response.data;
+              }
+          } catch (error) {
+              console.log(error);
+          }
+      }
+  },
+  computed: {
+      filteredUnpaidBills() {
+          return this.unpaidBills.filter((unpaidBill) => {
+              return unpaidBill.fee_type.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                  unpaidBill.description.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                  unpaidBill.unpaid_fee.toString().includes(this.searchQuery.toLowerCase())
+          })
+      },
+      totalPages() {
+          return Math.ceil(this.unpaidBills.length / this.itemsPerPage);
+      },
+      paginatedList() {
+          const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+          const endIndex = startIndex + this.itemsPerPage;
+          return this.filteredUnpaidBills.slice(startIndex, endIndex);
+      }
+  }
 }
 </script>
 
