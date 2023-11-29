@@ -55,14 +55,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Routes for managing user roles
     Route::middleware('checkPermission:assign_user_roles')->group(function () {
-        Route::post('/user/assign-role', [UserRoleController::class, 'assignPermission']);
-        Route::post('/user/remove-role', [UserRoleController::class, 'removePermission']);
+        Route::post('/user/assign-role', [UserRoleController::class, 'assignRole']);
+        Route::post('/user/remove-role', [UserRoleController::class, 'removeRole']);
     });
 
     // Routes for managing role permissions
     Route::middleware('checkPermission:assign_role_permissions')->group(function () {
-        Route::post('/user/assign-permission', [RolePermissionController::class, 'assignRole']);
-        Route::post('/user/remove-permission', [RolePermissionController::class, 'removeRole']);
+        Route::post('/user/assign-permission', [RolePermissionController::class, 'assignPermission']);
+        Route::post('/user/remove-permission', [RolePermissionController::class, 'removePermission']);
     });
 
     // Routes for managing role
