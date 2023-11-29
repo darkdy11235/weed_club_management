@@ -22,7 +22,8 @@ class Payment extends Model
         'account_name',
         'account_number',
         'amount_money',
-        'description'
+        'description',
+        'status'
     ];
 
     /**
@@ -109,5 +110,10 @@ class Payment extends Model
         ];
 
         return $result;
+    }
+
+    public function bills()
+    {
+        return $this->belongsToMany(Payment::class, 'bill_payments', 'bill_id', 'payment_id');
     }
 }

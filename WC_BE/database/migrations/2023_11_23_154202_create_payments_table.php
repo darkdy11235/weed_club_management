@@ -17,6 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->integer('account_number');
             $table->decimal('amount_money',10,2);
             $table->string('description');
+            $table->string('status')->default('pending');
             $table->timestamps();
 
             $table->foreign('user_id')

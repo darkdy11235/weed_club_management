@@ -19,8 +19,7 @@ class BillPaymentFactory extends Factory
 
         return [
             'bill_id' => $this->faker->randomElement($billIds),
-            'payment_id' => $this->faker->randomElement($paymentIds),
-            'amount' => $this->faker->randomFloat(2, 10, 500),
+            'payment_id' => $this->faker->randomElement($paymentIds)
         ];
     }
 }

@@ -12,7 +12,6 @@ class CreateBillPaymentsTable extends Migration
             // $table->id(); // Auto-incrementing primary key
             $table->foreignId('bill_id');
             $table->foreignId('payment_id');
-            $table->decimal('amount');
             $table->timestamps();
 
             $table->unique(['bill_id', 'payment_id']);
