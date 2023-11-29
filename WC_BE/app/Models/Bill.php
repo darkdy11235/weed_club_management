@@ -99,4 +99,5 @@ class Bill extends Model
 
         return $deletedBill;
     }
+
 }

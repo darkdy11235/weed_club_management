@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
 use App\Models\Role;
 use App\Models\UserRole;
+use Illuminate\Support\Facades\DB;
+
 class UserController extends Controller
 {
     public function show(Request $request)
@@ -326,6 +328,48 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public function getPaidBills(Request $request)
+    {
+        $userId = $request->user()->id;
+        $paidBills = DB::table('bills')
+            ->join('bill_payments', 'bills.id', '=', 'bill_payments.bill_id')
+            ->join('payments', 'bill_payments.payment_id', '=', 'payments.id')
+            ->where('payments.user_id', $userId)
+            ->select('bills.*')
+            ->get();
+
+        return response()->json(['paid_bills' => $paidBills]);
+    }
+
+    public function getUnPaidBills(Request $request)
+    {
+
+        $userId = $request->user()->id;
+        
+        $paidBills = DB::table('bills')
+            ->join('bill_payments', 'bills.id', '=', 'bill_payments.bill_id')
+            ->join('payments', 'bill_payments.payment_id', '=', 'payments.id')
+            ->where('payments.user_id', $userId)
+            ->select('bills.id')
+            ->get()
+            ->pluck('id');
+
+        // Get all bills for the user
+        $allBills = DB::table('bills')
+            ->select('bills.id')
+            ->get();
+
+        // Calculate unpaid bills by subtracting paid bills from all bills
+        $unpaidBills = array_diff($allBills->toArray(), $paidBills->toArray());
+
+        // Fetch the details of unpaid bills
+        $unpaidBillDetails = DB::table('bills')
+            ->whereIn('id', $unpaidBills)
+            ->get();
+
+        return response()->json(['unpaid_bills' => $unpaidBillDetails]);
     }
 }
 

@@ -22,6 +22,14 @@ Route::post('/password/reset', [ResetPasswordController::class, 'resetPassword']
 
 // Protected routes with authentication middleware
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/paidBills', [UserController::class, 'getPaidBills']);
+    Route::get('/unPaidBills', [UserController::class, 'getUnPaidBills']);
+
+
+
+
+
+
     Route::post('/payment/create-intent', [PaymentController::class, 'createPaymentIntent']);
     Route::post('/payment/webhook', [PaymentController::class, 'stripeWebhook']);
     // User routes
