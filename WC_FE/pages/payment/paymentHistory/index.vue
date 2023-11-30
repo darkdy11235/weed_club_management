@@ -93,7 +93,7 @@
 <script setup>
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
-import { useDecodeTokenStore } from '#imports';
+import { useDecodeTokenStore } from '@/stores/decodeToken.js';
 
 
 const config = useRuntimeConfig();

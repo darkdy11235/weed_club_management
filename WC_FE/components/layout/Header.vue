@@ -1,6 +1,6 @@
 <script>
-import { userInfo } from '@/stores/userInfo'
-import Popup from './Popup.vue';
+import { userInfo } from '@/stores/userInfo.js'
+import Popup from '../share/Popup.vue';
 
 export default defineComponent({
   setup() {

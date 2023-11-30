@@ -1,7 +1,7 @@
 <script setup>
 import { routerKey } from 'vue-router';
-import { useSidebarStore } from '#imports';
-import { useDecodeTokenStore } from '#imports';
+import { useSidebarStore } from '@/stores/index.js';
+import { useDecodeTokenStore } from '@/stores/decodeToken.js';
 
 const store = useSidebarStore();
 const { toggleMenu } = store;
