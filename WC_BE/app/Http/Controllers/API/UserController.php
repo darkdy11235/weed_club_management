@@ -50,14 +50,11 @@ class UserController extends Controller
                 }
             }
 
-            // Handle avatar separately if it is in the request
-
-            // Check if any fields need to be updated
             if (!empty($updatedFields)) {
                 // Update the user model with the new data
                 $user->update($updatedFields);
 
-                return response()->json(['message' => 'User updated successfully.'], 200);
+                return response()->json($updatedFields);
             } else {
                 return response()->json(['message' => 'No changes to update.'], 200);
             }
@@ -95,11 +92,9 @@ class UserController extends Controller
             $user = $request->user();
 
             // Handle avatar separately if it is in the request
-            $cloudinaryAvatarxxx = "";
             if ($request->hasFile('avatar')) {
                 $avatarPath = $request->file('avatar')->getRealPath();
                 $cloudinaryAvatar = Cloudinary::upload($avatarPath)->getSecurePath();
-                $cloudinaryAvatarxxx = $cloudinaryAvatar;
                 $user->avatar = $cloudinaryAvatar;
             }
 
@@ -358,5 +353,48 @@ class UserController extends Controller
 
         return response()->json(['unpaid_bills' => $unpaidBillDetails]);
     }
-}
 
+    public function getBillsByYear($year)
+    {
+        try {
+
+            $listMonth = DB::table('bills')
+                ->where('bills.year', $year)
+                ->select(
+                    'bills.month as month',
+                    'bills.id as bill_id',
+                )
+                ->orderBy('bills.month')
+                ->get();
+
+            $listUser = DB::table('users')
+                ->select(
+                    'users.id as id_user',
+                    'users.name',
+                )
+                ->orderBy('users.id')
+                ->get();
+            
+                $paidBills = DB::table('bills')
+                ->join('bill_payments', 'bills.id', '=', 'bill_payments.bill_id')
+                ->join('payments', 'bill_payments.payment_id', '=', 'payments.id')
+                ->whereIn('payments.user_id', $listUser->pluck('id_user')->toArray())
+                ->select('bills.id')
+                ->get();
+
+                // $paidBills = DB::table('bills')
+                // ->join('bill_payments', 'bills.id', '=', 'bill_payments.bill_id')
+                // ->join('payments', 'bill_payments.payment_id', '=', 'payments.id')
+                // ->whereIn('payments.user_id', $listUser->pluck('id_user')->toArray())
+                // ->select('bills.id')
+                // ->get()
+                // ->pluck('id');
+            
+
+            return response()->json($paidBills);
+        } catch (\Exception $error) {
+            return response()->json(['error' => 'Query error: ' . $error->getMessage()], 500);
+        }
+    }
+
+}

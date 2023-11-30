@@ -24,6 +24,25 @@ Route::post('/password-reset', [ResetPasswordController::class, 'reset'])->name(
 
 // Protected routes with authentication middleware
 Route::middleware(['auth:sanctum'])->group(function () {
+
+    Route::get('/bills', [BillController::class, 'getAllBill'])
+    ->middleware('checkPermission:read_bill');
+
+    // Create a new bill
+    Route::post('/bills', [BillController::class, 'createBill'])
+    ->middleware('checkPermission:create_bill');
+    // Update an existing bill
+    Route::put('/bills/{billId}', [BillController::class, 'updateBill'])
+    ->middleware('checkPermission:update_bill');
+    // Retrieve a specific bill by ID
+    Route::get('/bills/{billId}', [BillController::class, 'getBillById'])
+    ->middleware('checkPermission:read_bill');
+    // Delete a specific bill by ID
+    Route::delete('/bills/{billId}', [BillController::class, 'deleteBill'])
+    ->middleware('checkPermission:delete_bill');
+    // Retrieve paid bills for a specific user
+    Route::get('/users/{userId}/paid-bills', [BillController::class, 'getPaidBillsByUserId']);
+
     Route::get('/paidBills', [UserController::class, 'getPaidBills']);
     Route::get('/unPaidBills', [UserController::class, 'getUnPaidBills']);
     
@@ -38,7 +57,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     // Logout route
     Route::post('/logout', [LoginController::class, 'logout']);
-    
+    Route::get('/get-bills/{year}', [UserController::class, 'getBillsByYear'])
+    ->middleware('checkPermission:read_bill');
     // Routes for managing users
     Route::get('/users', [UserController::class, 'index'])
     ->middleware('checkPermission:read_user');
@@ -92,10 +112,3 @@ Route::prefix('payment')->group(function () {
     Route::get('detail/{paymentId}', [PaymentController::class, "getPaymentDetail"]);
   });
   
-  Route::prefix('bill')->group(function(){
-    Route::get("all", [BillController::class, "getAllBill"]);
-    Route::get("read/{id}", [BillController::class, "getBillById"]);
-    Route::post('create', [BillController::class, "createBill"]);
-    Route::put('update', [BillController::class, "updateBill"]);
-    Route::delete("delete/{id}", [BillController::class, "deleteBill"]);
-  });
