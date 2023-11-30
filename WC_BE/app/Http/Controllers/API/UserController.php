@@ -13,6 +13,7 @@ use Illuminate\Database\QueryException;
 use App\Models\Role;
 use App\Models\UserRole;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
 {
@@ -27,59 +28,45 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-        // Validation rules
-        $validator = Validator::make($request->all(), [
-            'name' => 'string',
-            'age' => 'integer',
-            'gender' => 'string|in:Female,Male',
-            'phone' => 'string|unique:users',
-            'address' => 'string',
-            'email' => 'email|unique:users,email',
-            'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:204800',
-        ], [
-            'phone.unique' => 'The phone number is already in use. Please choose a different one.',
-            'email.unique' => 'The email address is already in use. Please choose another email address.',
-            'avatar.image' => 'The avatar must be an image.',
-            'avatar.mimes' => 'The avatar must be a file of type: jpeg, png, jpg, gif, svg.',
-            'avatar.max' => 'The avatar may not be greater than 204800 kilobytes.',
-        ]);
-
-        // Check for validation errors
-        if ($validator->fails()) {
-            return response()->json(['error validator' => $validator->errors()], 400);
-        }
-
         try {
             $user = $request->user();
 
-            // Loop through the request data and update corresponding fields
+            // Compare user data with data from the request
+            $updatedFields = [];
             foreach ($request->all() as $key => $value) {
                 // Skip fields that shouldn't be updated
                 if ($key == 'password' || $key == 'avatar') {
+                    if ($key =='avatar') {
+                        $avatarPath = $request->file('avatar')->getRealPath();
+                        $cloudinaryAvatar = Cloudinary::upload($avatarPath)->getSecurePath();
+                        $updatedFields['avatar'] = $cloudinaryAvatar;
+                    }
                     continue;
                 }
-
-                // Update the user model
-                $user->{$key} = $value;
+                
+                // Compare the field value with the existing user data
+                if ($user->{$key} != $value) {
+                    $updatedFields[$key] = $value;
+                }
             }
 
             // Handle avatar separately if it is in the request
-            $cloudinaryAvatarxxx = "";
-            if ($request->hasFile('avatar')) {
-                $avatarPath = $request->file('avatar')->getRealPath();
-                $cloudinaryAvatar = Cloudinary::upload($avatarPath)->getSecurePath();
-                $cloudinaryAvatarxxx = $cloudinaryAvatar;
-                $user->avatar = $cloudinaryAvatar;
+
+            // Check if any fields need to be updated
+            if (!empty($updatedFields)) {
+                // Update the user model with the new data
+                $user->update($updatedFields);
+
+                return response()->json(['message' => 'User updated successfully.'], 200);
+            } else {
+                return response()->json(['message' => 'No changes to update.'], 200);
             }
-
-            // Save the changes
-            $user->save();
-
-            return response()->json(['message' => 'User updated successfully', 'user' => $cloudinaryAvatarxxx]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'User not found.'], 404);
         } catch (QueryException $e) {
             if ($e->errorInfo[1] == 1062) {
                 // MySQL error code for unique constraint violation
-                return response()->json(['error query' => 'Duplicate entry. The provided data violates a unique constraint.'], 400);
+                return response()->json(['error' => 'Duplicate entry. The provided data violates a unique constraint.'], 400);
             }
 
             // Handle other query exceptions or rethrow for unhandled cases
