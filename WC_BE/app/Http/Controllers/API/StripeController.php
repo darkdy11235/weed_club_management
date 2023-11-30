@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\User; // Import User model
+use App\Models\BillPayment;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -35,6 +36,13 @@ class StripeController extends Controller
             'amount' => $totalAmount,
             'status' => 'unpaid',
         ]);
+
+        foreach($selectedBills as $selectedBill) {
+            BillPayment::create([
+                'bill_id' => $selectedBill, // Assuming you're using authentication
+                'payment_id' => $payment->id,
+            ]);
+        }
         $paymentName = "Payment for ";
         foreach ($selectedBills as $selectedBill) {
             $paymentName .= DB::table('bills')

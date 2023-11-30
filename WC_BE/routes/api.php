@@ -57,6 +57,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     // Logout route
     Route::post('/logout', [LoginController::class, 'logout']);
+    // get bills by year
     Route::get('/get-bills/{year}', [UserController::class, 'getBillsByYear'])
     ->middleware('checkPermission:read_bill');
     // Routes for managing users
