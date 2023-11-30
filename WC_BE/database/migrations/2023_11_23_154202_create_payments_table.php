@@ -11,12 +11,7 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->string('pay_account')->nullable();
-            $table->string('pay_method');
-            $table->string('account_name');
-            $table->integer('account_number');
-            $table->decimal('amount_money',10,2);
-            $table->string('description');
+            $table->decimal('amount',10,2);
             $table->string('status')->default('pending');
             $table->timestamps();
 
