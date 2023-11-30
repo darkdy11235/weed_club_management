@@ -329,42 +329,130 @@ class UserController extends Controller
     {
 
         $userId = $request->user()->id;
-        
-        $paidBills = DB::table('bills')
+        // get month created of user
+        $dateCreated = DB::table('users')->
+            where('id', $userId)->
+            select('created_at')->
+            first();
+        if ($dateCreated) {
+            $month = \Carbon\Carbon::parse($dateCreated->created_at)->month;
+            $year = \Carbon\Carbon::parse($dateCreated->created_at)->year;
+
+            $paidBills = DB::table('bills')
             ->join('bill_payments', 'bills.id', '=', 'bill_payments.bill_id')
             ->join('payments', 'bill_payments.payment_id', '=', 'payments.id')
             ->where('payments.user_id', $userId)
+            ->where('payments.status', "paid")
             ->select('bills.id')
             ->get()
             ->pluck('id');
 
-        // Get all bills for the user
-        $allBills = DB::table('bills')
+            $paidBills = $paidBills->toArray();
+
+            $allBills = DB::table('bills')
             ->select('bills.id')
+            ->get()
+            ->pluck('id');
+
+            $allBills = $allBills->toArray();
+
+            // Calculate unpaid bills by subtracting paid bills from all bills
+            $unpaidBillIds = [];
+
+            foreach ($allBills as $bilId) {
+        
+                if (!in_array($bilId, $paidBills)) {
+                    array_push($unpaidBillIds, $bilId);
+                }
+            }
+
+            // Fetch the details of unpaid bills
+            $unpaidBillDetails = DB::table('bills')
+            ->whereIn('id', $unpaidBillIds)
+            ->where(function ($query) use ($year, $month) {
+                $query->where('year', '>', $year)
+                    ->orWhere(function ($query) use ($year, $month) {
+                        $query->where('year', '=', $year)
+                            ->where('month', '>=', $month);
+                    });
+            })
             ->get();
 
-        // Calculate unpaid bills by subtracting paid bills from all bills
-        $unpaidBills = array_diff($allBills->toArray(), $paidBills->toArray());
 
-        // Fetch the details of unpaid bills
-        $unpaidBillDetails = DB::table('bills')
-            ->whereIn('id', $unpaidBills)
+            return response()->json($unpaidBillDetails);
+        } else {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+    }
+
+    public function getUnPaidBillsByUserId($userId)
+    {        
+        // get month created of user
+        $dateCreated = DB::table('users')->
+            where('id', $userId)->
+            select('created_at')->
+            first();
+        if ($dateCreated) {
+            $month = \Carbon\Carbon::parse($dateCreated->created_at)->month;
+            $year = \Carbon\Carbon::parse($dateCreated->created_at)->year;
+
+            $paidBills = DB::table('bills')
+            ->join('bill_payments', 'bills.id', '=', 'bill_payments.bill_id')
+            ->join('payments', 'bill_payments.payment_id', '=', 'payments.id')
+            ->where('payments.user_id', $userId)
+            ->where('payments.status', "paid")
+            ->select('bills.id')
+            ->get()
+            ->pluck('id');
+
+            $paidBills = $paidBills->toArray();
+
+            $allBills = DB::table('bills')
+            ->select('bills.id')
+            ->get()
+            ->pluck('id');
+
+            $allBills = $allBills->toArray();
+
+            // Calculate unpaid bills by subtracting paid bills from all bills
+            $unpaidBillIds = [];
+
+            foreach ($allBills as $bilId) {
+        
+                if (!in_array($bilId, $paidBills)) {
+                    array_push($unpaidBillIds, $bilId);
+                }
+            }
+
+            // Fetch the details of unpaid bills
+            $unpaidBillDetails = DB::table('bills')
+            ->whereIn('id', $unpaidBillIds)
+            ->where(function ($query) use ($year, $month) {
+                $query->where('year', '>', $year)
+                    ->orWhere(function ($query) use ($year, $month) {
+                        $query->where('year', '=', $year)
+                            ->where('month', '>=', $month);
+                    });
+            })
             ->get();
 
-        return response()->json(['unpaid_bills' => $unpaidBillDetails]);
+
+            return response()->json($unpaidBillDetails);
+        } else {
+            return response()->json(['error' => 'User not found'], 404);
+        }
     }
 
     public function getBillsByYear($year)
     {
+        
         try {
-
-            $listMonth = DB::table('bills')
+            $listBill = DB::table('bills')
                 ->where('bills.year', $year)
                 ->select(
                     'bills.month as month',
                     'bills.id as bill_id',
                 )
-                ->orderBy('bills.month')
                 ->get();
 
             $listUser = DB::table('users')
@@ -374,24 +462,65 @@ class UserController extends Controller
                 )
                 ->orderBy('users.id')
                 ->get();
-            
-                $paidBills = DB::table('bills')
-                ->join('bill_payments', 'bills.id', '=', 'bill_payments.bill_id')
-                ->join('payments', 'bill_payments.payment_id', '=', 'payments.id')
-                ->whereIn('payments.user_id', $listUser->pluck('id_user')->toArray())
-                ->select('bills.id')
-                ->get();
+                $listFinal = [];
 
-                // $paidBills = DB::table('bills')
-                // ->join('bill_payments', 'bills.id', '=', 'bill_payments.bill_id')
-                // ->join('payments', 'bill_payments.payment_id', '=', 'payments.id')
-                // ->whereIn('payments.user_id', $listUser->pluck('id_user')->toArray())
-                // ->select('bills.id')
-                // ->get()
-                // ->pluck('id');
-            
+                foreach ($listUser as $user) {
+                    $currentUser = [
+                        'id_user' => $user->id_user,
+                        'name' => $user->name,
+                        'bills' => [],
+                    ];
+                    $userId = $user->id_user;
+                    // get month created of user
+                    $dateCreated = DB::table('users')->
+                    where('id', $userId)->
+                    select('created_at')->
+                    first();
+                    $month = \Carbon\Carbon::parse($dateCreated->created_at)->month;
+                    $year = \Carbon\Carbon::parse($dateCreated->created_at)->year;
 
-            return response()->json($paidBills);
+                    $paidBills = DB::table('bills')
+                    ->join('bill_payments', 'bills.id', '=', 'bill_payments.bill_id')
+                    ->join('payments', 'bill_payments.payment_id', '=', 'payments.id')
+                    ->where('payments.user_id', $userId)
+                    ->where('payments.status', "paid")
+                    ->select('bills.id')
+                    ->get()
+                    ->pluck('id');
+
+                    $paidBills = $paidBills->toArray();
+
+                    $allBills = DB::table('bills')
+                    ->select('bills.id')
+                    ->get()
+                    ->pluck('id');
+
+                    $allBills = $allBills->toArray();
+
+                    // Calculate unpaid bills by subtracting paid bills from all bills
+                    $unpaidBillIds = [];
+
+                    foreach ($allBills as $bilId) {
+                
+                        if (!in_array($bilId, $paidBills)) {
+                            array_push($unpaidBillIds, $bilId);
+                        }
+                    }
+                    foreach ($listBill as $bill) {
+                        $billStatus = in_array($bill->bill_id, $unpaidBillIds)
+                            ? 'unpaid'
+                            : 'paid';
+                
+                        $currentUser['bills'][] = [
+                            'month' => $bill->month,
+                            'bill_id' => $bill->bill_id,
+                            'bill_status' => $billStatus,
+                        ];
+                    }
+                
+                    $listFinal[] = $currentUser;
+                }
+            return response()->json($listFinal);
         } catch (\Exception $error) {
             return response()->json(['error' => 'Query error: ' . $error->getMessage()], 500);
         }
