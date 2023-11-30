@@ -13,7 +13,7 @@
   const route = useRoute();
   const userId = route.params.id;
 
-  const URL_BE = import.meta.env.VITE_APP_BASE_BE || 'http://localhost:8080'
+  const URL_BE = import.meta.env.VITE_APP_BASE_BE || 'http://localhost:8000'
 
   const DataUser = ref({
     id_user: "",

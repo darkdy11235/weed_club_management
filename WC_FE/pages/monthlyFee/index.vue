@@ -9,7 +9,7 @@
                             <div class="relative w-[100%]">
                                 <input v-model="searchQuery" type="text" id="search_money" name="search_money"
                                     placeholder="Search"
-                                    class="w-full px-12 bg-white border py-[10px] rounded-[4px] focus:outline-none focus:border-blue-500">
+                                    class="w-full px-12 bg-white border py-[10px] rounded-[10px] focus:outline-none focus:border-blue-500">
                                 <font-awesome-icon :icon="['fas', 'search']"
                                     class="absolute top-[50%] left-4 translate-y-[-50%]" />
                             </div>
@@ -39,10 +39,10 @@
                         </template>
                     </Popup>
                 </div>
-                <div v-if="filteredList.length === 0" class="min-h-[60vh] flex align-center justify-center">
+                <!-- <div v-if="filteredList.length === 0" class="min-h-[60vh] flex align-center justify-center">
                     Không có bill nào!
-                </div>
-                <table v-else class="border-collapse table-auto">
+                </div> -->
+                <table class="border-collapse table-auto">
                     <thead>
                         <tr class="h-11">
                             <th class="px-6 bg-[#fafafa] text-start text-[#262626] font-normal">Title</th>
@@ -54,7 +54,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(itemBill) in paginatedList" :key="itemBill.bill_id"
+                        <tr v-for="itemBill in paginatedList" :key="itemBill"
                             class="h-[72px] hover:bg-gray-100">
                             <td class="px-6 border-b border-r border-[#f0f0f0] text-[#595959]">{{ itemBill.fee_type }}</td>
                             <td class="px-6 border-b border-r border-[#f0f0f0] text-[#595959]">{{ itemBill.description }}
@@ -64,7 +64,7 @@
                             <td class="px-6 border-b border-r border-[#f0f0f0] text-[#595959]">{{ itemBill.name }}
                             </td>
                             <td class="px-6 border-b border-r border-[#f0f0f0] text-[#595959]">{{
-                                formatDate(itemBill.create_at) }}
+                                formatDate(itemBill.created_at) }}
                             </td>
                             <td class="px-6 border-b border-[#f0f0f0] text-[#595959] align-middle">
                                 <div class="text-center w-100">
@@ -115,7 +115,7 @@
                 </table>
                 <div v-if="filteredList.length > 0"
                     class="px-6 text-center pt-[30px] flex gap-3 align-center justify-center">
-                    <!-- <v-pagination v-model="page" :length="8" :total-visible="5"></v-pagination> -->
+                  
                     <button class="px-3 py-1 bg-gray-100 rounded-md" :class="currentPage === 1 ? 'invisible' : 'visible'"
                         @click="currentPage > 1 ? currentPage-- : currentPage = 1">Previous</button>
 
@@ -141,7 +141,7 @@
 import { ref } from 'vue';
 import Popup from '~/components/share/Popup.vue';
 import billForm from '~/components/modules/monthlyFee/billForm.vue';
-import axios from 'axios';
+import {axios} from '@/utils/api/axios';
 import { useToast } from 'vue-toastification';
 import { useBillStore } from '@/stores/bill';
 
@@ -152,6 +152,7 @@ export default {
     },
     data() {
         return {
+            listBill: [],
             isPopupOpen: false,
             openPopupsEditId: {},
             openPopupsDeleteId: {},
@@ -270,18 +271,17 @@ export default {
                 },
 
             ],
-            listBill: [],
+          
         }
     },
     methods: {
         async getAllBill() {
             try {
-                const res = await axios.get(`${this.$config.public.API_BASE_BE}/api/v1/payment/bill`);
+                const res = await axios.get(`${this.$config.public.API_BASE_BE}/api/bills`);
                 if (res.status === 200) {
                     const billStore = useBillStore();
-                    billStore.setBills(res.data.bill);
+                    billStore.setBills(res.data);
                     this.listBill = billStore.$state.listBill;
-                    // console.log(this.listBill);
                 }
             } catch (err) {
                 console.log(err);
@@ -289,7 +289,7 @@ export default {
         },
         async getBillById(id) {
             try {
-                const res = await axios.get(`${this.$config.public.API_BASE_BE}/api/v1/payment/bill/${id}`);
+                const res = await axios.get(`${this.$config.public.API_BASE_BE}/api/bills/${id}`);
                 console.log(res);
                 if (res.status === 200) {
                     this.billEdit.title = res.data[0].fee_type;
@@ -351,7 +351,7 @@ export default {
         },
         async editBill(id) {
             try {
-                const res = await axios.put(`${this.$config.public.API_BASE_BE}/api/v1/payment/bill/${id}`, {
+                const res = await axios.put(`${this.$config.public.API_BASE_BE}/api/bills/${id}`, {
                     fee_type: this.billEdit.title,
                     description: this.billEdit.desc,
                     month: this.billEdit.currentMonth,
@@ -396,21 +396,6 @@ export default {
         }
     },
     mounted() {
-        // const accessToken = localStorage.getItem('accessToken');
-        // const base64Url = accessToken.split('.')[1];
-        // const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        // const jsonPayload = decodeURIComponent(
-        //     atob(base64)
-        //         .split('')
-        //         .map(function (c) {
-        //             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        //         })
-        //         .join('')
-        // );
-        // const user = JSON.parse(jsonPayload);
-        // console.log(user.idUser);
-        // this.userId = user.idUser;
-
         this.getAllBill();
     },
     computed: {
