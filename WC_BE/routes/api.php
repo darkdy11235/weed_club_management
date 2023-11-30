@@ -3,40 +3,40 @@
 use App\Http\Controllers\API\BillController;
 use App\Http\Controllers\API\LoginController;
 use App\Http\Controllers\API\PaymentController;
+use App\Http\Controllers\API\PaymentTestController;
 use App\Http\Controllers\API\RegistrationController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\UserRoleController;
 use App\Http\Controllers\API\RoleController;
+use App\Http\Controllers\API\StripeController;
 use App\Http\Controllers\API\RolePermissionController;
 use App\Http\Controllers\API\PermissionController;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\API\ResetPasswordController;
-
+use Illuminate\Support\Facades\Route;
 // Public routes
 
 Route::post('/register', [RegistrationController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 Route::post('/password/reset', [ResetPasswordController::class, 'resetPassword']);
-
+Route::get('/session', [StripeController::class, 'session'])->name('session');
+Route::get('/success', [StripeController::class, 'success'])->name('success');
 // Protected routes with authentication middleware
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/paidBills', [UserController::class, 'getPaidBills']);
     Route::get('/unPaidBills', [UserController::class, 'getUnPaidBills']);
-
-
-
-
-
-
-    Route::post('/payment/create-intent', [PaymentController::class, 'createPaymentIntent']);
-    Route::post('/payment/webhook', [PaymentController::class, 'stripeWebhook']);
+    
+    Route::get('/checkout', [StripeController::class, 'checkOut'])->name('checkout');
+    
+    
+    
     // User routes
     Route::get('/user', [UserController::class, 'show']);
     Route::put('/user/update', [UserController::class, 'update']);
     Route::post('/user/update', [UserController::class, 'updateAvatar']);
-    Route::put('/user/change-password', [UserController::class, 'changePassword']);
+    Route::put('/user/changePassword', [UserController::class, 'changePassword']);
     
     // Logout route
     Route::post('/logout', [LoginController::class, 'logout']);
