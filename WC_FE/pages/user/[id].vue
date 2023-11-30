@@ -2,17 +2,15 @@
 <script setup>
 
   import { ref, onMounted } from 'vue';
-  import axios from 'axios';
+  import { axios } from '../../utils/api/axios'
   import { useRoute, useRouter } from 'vue-router';
-  import { notify } from '@kyvg/vue3-notification';
+
 
   import displayIMG from '../../../middleware/displayIMG';
   
   const config= useRuntimeConfig();
   const API_BE = config.public.API_BASE_BE;
 
-  const accessToken = localStorage.getItem('token');
-  headers = {'Authorization': `Bearer ${accessToken}`}
 
   const router = useRouter();
   const route = useRoute();
@@ -20,29 +18,29 @@
 
 
   const DataUser = ref({
-    id_user: "",
+    id: "",
     name: "",
     age: "",
     gender: "",
     phone: "",
     address: "",
     email: "",
-    username: "",
-    password: "",
+    // username: "",
+    // password: "",
     avatar: "",
     status: ""
   });
 
   const errorValue = ref({
-    id_user: "",
+    id: "",
     name: "",
     age: "",
     gender: "",
     phone: "",
     address: "",
     email: "",
-    username: "",
-    password: "",
+    // username: "",
+    // password: "",
     avatar: "",
     status: ""
   });
@@ -92,19 +90,19 @@
       errorValue.value.email = "";
     }
 
-    if (DataUser.value.username == "") {
-      isValue = false;
-      errorValue.value.username = "username is required";
-    } else {
-      errorValue.value.username = "";
-    }
+    // if (DataUser.value.username == "") {
+    //   isValue = false;
+    //   errorValue.value.username = "username is required";
+    // } else {
+    //   errorValue.value.username = "";
+    // }
 
-    if (DataUser.value.password == "") {
-      isValue = false;
-      errorValue.value.password = "password is required";
-    } else {
-      errorValue.value.password = "";
-    }
+    // if (DataUser.value.password == "") {
+    //   isValue = false;
+    //   errorValue.value.password = "password is required";
+    // } else {
+    //   errorValue.value.password = "";
+    // }
 
     if (DataUser.value.avatar == "") {
       isValue = false;
@@ -128,20 +126,19 @@
 
   const getUser = (id) => {
    axios
-      .get(`${API_BE}/api/v1/users/${id}`)
+      .get(`${API_BE}/api/users/${id}`)
       .then((response) => {
-        const data = response.data[0];
-        // console.log(data);
+        const data = response.data.user;
 
-        DataUser.value.id_user = data.id_user;
+        DataUser.value.id = data.id;
         DataUser.value.name = data.name;
         DataUser.value.age = data.age;
         DataUser.value.gender = data.gender;
         DataUser.value.phone = data.phone;
         DataUser.value.address = data.address;
         DataUser.value.email = data.email;
-        DataUser.value.username = data.username;
-        DataUser.value.password = data.password;
+        // DataUser.value.username = data.username;
+        // DataUser.value.password = data.password;
         DataUser.value.avatar = data.avatar;
         DataUser.value.status = data.status;
 
@@ -159,8 +156,6 @@
     console.log("id", userId);
     if (userId != 0){
       getUser(userId);
-
-      console.log("img", DataUser.value);
     }
 
     
@@ -170,98 +165,63 @@
   
 
 
-  // const saveUser = () => {
-  //   if(validate()){
-
-  //     const data = {
-  //       id_user: DataUser.value.id_user,
-  //       name: DataUser.value.name,
-  //       age: DataUser.value.age,
-  //       gender: DataUser.value.gender,
-  //       phone: DataUser.value.phone,
-  //       address: DataUser.value.address,
-  //       email: DataUser.value.email,
-  //       username: DataUser.value.username,
-  //       password: DataUser.value.password,
-  //       status: DataUser.value.status
-  //     };
-
-
-  //     console.log('dataa',data);
-  //     if(userId){
-  //       axios
-  //       .put(`${API_BE}/api/v1/users/${userId}`, data)
-  //       .then((req, res) => {
-  //         console.log('hehe',req);
-  //         notify({
-  //           type: 'success',
-  //           title: 'Update success',
-  //           text: 'Update success',
-  //         });
-  //         Cancel();
-  //       })
-  //       .catch((req, res, error) => {
-  //         console.log('hehe',req);
-  //         console.log(error);
-  //       });
-  //     }
-  //   }
-  // };
-
-  // const updateAvatar = (event) => {
-  //   const selectedFile = event.target.files[0];
-  //   if (selectedFile) {
-      
-  //     DataUser.value.avatar = selectedFile.name;
-  //     console.log('DataUser.value.avatar', DataUser.value.avatar);
-  //   }
-  // };
-
-  const saveUser = () => {
+  const saveUser = async () => {
   if (validate()) {
     // Lấy tệp avatar từ input
     const avatarInput = document.getElementById('imageInput');
+
     const selectedAvatar = avatarInput.files[0];
 
-    // const data = {
-    //   id_user: DataUser.value.id_user,
-    //   name: DataUser.value.name,
-    //   age: DataUser.value.age,
-    //   gender: DataUser.value.gender,
-    //   phone: DataUser.value.phone,
-    //   address: DataUser.value.address,
-    //   email: DataUser.value.email,
-    //   username: DataUser.value.username,
-    //   password: DataUser.value.password,
-    //   status: DataUser.value.status
-    // };
+    const data = {
+      id: DataUser.value.id,
+      name: DataUser.value.name,
+      age: DataUser.value.age,
+      gender: DataUser.value.gender,
+      phone: DataUser.value.phone,
+      address: DataUser.value.address,
+      email: DataUser.value.email,
+      // password: DataUser.value.password,
+      status: DataUser.value.status
+    };
 
-    const data = DataUser.value;
+    // const data = DataUser.value;
+    console.log("data", data);
 
     // Tạo FormData để chứa dữ liệu và tệp avatar
     const formData = new FormData();
 
     // Kiểm tra xem có tệp avatar đã được chọn không
     if (selectedAvatar) {
+      console.log("selectedAvatar", selectedAvatar);
       formData.append('avatar', selectedAvatar);
+    }else {
+      console.log("selectedAvatar", DataUser.value.avatar);
+      formData.append('avatar', DataUser.value.avatar);
+
     }
 
     // Thêm dữ liệu người dùng vào FormData
-    for (const key in data) {
-        formData.append(key, data[key]);
-      }
+    // for (const key in data) {
+    //     formData.append(key, data[key]);
+    //   }
 
+    for (const key in data) {
+  if (data.hasOwnProperty(key)) {
+    if (data[key] === null || data[key] === undefined) {
+      console.error(`Value for key '${key}' is null or undefined.`);
+    } else {
+      formData.append(key, data[key]);
+    }
+  }
+}
 
     if (userId) {
-      axios
-        .put(`${API_BE}/api/v1/users/${userId}`, formData)
+      console.log("formData", formData);
+     await axios
+        .put(`${API_BE}/api/users`, formData)
         .then((response) => {
           console.log('Response:', response);
-          notify({
-            type: 'success',
-            title: 'Update success',
-            text: 'Update success',
-          });
+         
           Cancel();
         })
         .catch((error) => {
@@ -273,7 +233,7 @@
 
 
   const Cancel = () => {
-    router.push('/admin/users');
+    router.push('/user');
   }
 
 </script>
@@ -377,7 +337,7 @@
                 :icon="['fas', 'pen-to-square']" />
           </div>
 
-          <div class="input  p-2 mb-4 w-3/4 relative" >
+          <!-- <div class="input  p-2 mb-4 w-3/4 relative" >
             <label for="" class="text-base text-black font-semibold">User Name:</label>
             <input 
               class="focus:outline-none placeholder:text-slate-500 w-full border-2 rounded px-3 py-2  pr-12 mt-2 text-base" 
@@ -394,7 +354,7 @@
               <font-awesome-icon 
                 class="absolute right-6 bottom-5 text-xl cursor-pointer"
                 :icon="['fas', 'pen-to-square']" />
-          </div>
+          </div> -->
 
 
           <div class="input  p-2 mb-4 w-3/4 relative" >

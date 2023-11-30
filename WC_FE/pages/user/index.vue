@@ -1,8 +1,9 @@
 <script setup>
 
-  import axios from "axios";
+//   import axios from "axios";
 //   import Cookies from 'js-cookie';
 //   import { notify } from '@kyvg/vue3-notification';
+    import { axios } from '../../utils/api/axios'
 
   import UserCard from "@/components/modules/users/UserCard.vue";
   import SearchItem from "@/components/share/SearchItem.vue";
@@ -12,8 +13,15 @@
   const config= useRuntimeConfig();
   const API_BE = config.public.API_BASE_BE;
 
-  const accessToken = localStorage.getItem('token');
-  headers = {'Authorization': `Bearer ${accessToken}`}
+  const accessToken = localStorage.getItem('accessToken');
+  if(accessToken){
+    console.log("accessToken", accessToken);
+    // headers = {'Authorization': `Bearer ${accessToken}`}
+    // console.log("headers", headers);
+
+  }else{
+    console.log("accessToken", accessToken);
+  }
 
   const userData = ref([]);
   const searchKeyword = ref("");
@@ -58,7 +66,7 @@
   const onDelete = (id) => {
       closeAllPopup();
       axios 
-          .delete(`${API_BE}/api/users/${id}`, { headers })
+          .delete(`${API_BE}/api/users/${id}`)
           .then((response) => {
           notify({
               title: "Delete Success",
@@ -80,8 +88,9 @@
 
   const fetchData = async () => {
       try {
-          const response = await axios.get(`${API_BE}/api/users`, { headers });
-          return userData.value = response.data;
+          const response = await axios.get(`${API_BE}/api/users`);
+          console.log(response.data.users);
+          return userData.value = response.data.users;
       }
       catch (error) {
           return [];
@@ -154,7 +163,7 @@
  </div>
  
  <div class="container-body" >
- 
+      
      <div v-for="user in filteredUsers"
      :key="user.idUser">
  
