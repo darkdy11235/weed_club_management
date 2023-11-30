@@ -6,14 +6,20 @@
   import { useRoute, useRouter } from 'vue-router';
   import { notify } from '@kyvg/vue3-notification';
 
+  
+  const config= useRuntimeConfig();
+  const URL_BE = config.public.API_BASE_BE;
+
+  const accessToken = localStorage.getItem('token');
+  headers = {'Authorization': `Bearer ${accessToken}`}
+
+
   import displayIMG from '../../../middleware/displayIMG';
 
 
   const router = useRouter();
   const route = useRoute();
   const userId = route.params.id;
-
-  const URL_BE = import.meta.env.VITE_APP_BASE_BE || 'http://localhost:8080'
 
   const DataUser = ref({
     id_user: "",
@@ -129,7 +135,7 @@
       }
 
       axios
-        .post(`${URL_BE}/api/v1/users`, formData)
+        .post(`${URL_BE}/api/users`, {headers}, formData)
         .then((response) => {
           console.log(response);
           notify({
@@ -146,7 +152,7 @@
   };
 
   const Cancel = () => {
-    router.push('/admin/users');
+    router.push('/users');
   }
 
 </script>

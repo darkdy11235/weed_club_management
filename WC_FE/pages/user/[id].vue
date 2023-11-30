@@ -11,6 +11,9 @@
   const config= useRuntimeConfig();
   const API_BE = config.public.API_BASE_BE;
 
+  const accessToken = localStorage.getItem('token');
+  headers = {'Authorization': `Bearer ${accessToken}`}
+
   const router = useRouter();
   const route = useRoute();
   const userId = route.params.id;
