@@ -21,16 +21,14 @@ Route::post('/register', [RegistrationController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 Route::post('/password/reset', [ResetPasswordController::class, 'resetPassword']);
-Route::get('/session', [StripeController::class, 'session'])->name('session');
-Route::get('/success', [StripeController::class, 'success'])->name('success');
+
 // Protected routes with authentication middleware
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/paidBills', [UserController::class, 'getPaidBills']);
     Route::get('/unPaidBills', [UserController::class, 'getUnPaidBills']);
     
-    Route::get('/checkout', [StripeController::class, 'checkOut'])->name('checkout');
-    
-    
+    Route::get('/session', [StripeController::class, 'session'])->name('session');
+    Route::get('/success', [StripeController::class, 'success'])->name('success');
     
     // User routes
     Route::get('/user', [UserController::class, 'show']);

@@ -17,15 +17,10 @@ use App\Models\UserRole;
 use Stripe\Stripe;
 
 class StripeController extends Controller
-{
-    // public function checkout()
-    // {
-    //     return view('checkout');
-    // }
- 
+{ 
     public function session(Request $request)
     {
-        $selectedBills = [4, 5, 6];
+        $selectedBills = $request->selectedBills;
         $totalAmount = 0;
         foreach ($selectedBills as $selectedBill) {
             $totalAmount += DB::table('bills')
@@ -36,7 +31,7 @@ class StripeController extends Controller
         Stripe::setApiKey('sk_test_51OHViTDQ4uW48PW6LVGXuZtF8hvO8JHQEcKjjB73xoEAvFQCyNQKWp3WHZaNevkkICXfro1piV8LVvug9hTWojP900q50S7dWT');
 
         $payment = Payment::create([
-            'user_id' => 1, // Assuming you're using authentication
+            'user_id' => $request->user()->id, // Assuming you're using authentication
             'amount' => $totalAmount,
             'status' => 'unpaid',
         ]);
@@ -72,19 +67,15 @@ class StripeController extends Controller
  
     public function success()
     {
-        $payment = Payment::findOrFail(36);
+        $payment = Payment::findOrFail(34);
 
         if ($payment->status === 'unpaid') {
             $payment->status = 'paid';
             $payment->save();
 
-            // return json response
-            return response()->json(['message' => 'payment successfully']);
+            return response()->json(['message' => 'payment successfully', 'role' => $role]);
         } else {
-            // Nếu trạng thái không phải 'unpaid', xử lý theo ý của bạn
-            return redirect()->route('payment-failed')->with('error', 'Thanh toán đã được xử lý trước đó');
+            return response()->json(['message' => 'payment fail', 'role' => $role]);       
         }
-        
-       
     }
 }
