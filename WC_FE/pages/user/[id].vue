@@ -12,6 +12,7 @@
   const API_BE = config.public.API_BASE_BE;
 
   const accessToken = localStorage.getItem('token');
+  let headers;
   headers = {'Authorization': `Bearer ${accessToken}`}
 
   const router = useRouter();

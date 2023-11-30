@@ -21,13 +21,11 @@ const role_id = 1
 <script>
 export default {
     mounted() {
-        if (this.$route.path.startsWith('/monthlyFee') || this.$route.path.startsWith('payment/paymentHistory')) {
-            this.isSubMenuVisible = true;
-        }
+
     },
     data() {
         return {
-            isSubMenuVisible: false
+            isSubMenuVisible: true
         }
     },
 }
@@ -57,9 +55,9 @@ export default {
                 <span class="transition-all text whitespace-nowrap"
                     :class="`${is_expanded ? 'opacity-1' : 'opacity-0'}`">Dashboard</span>
             </Nuxt-link>
-            <Nuxt-link v-if="role_id === 1" to="admin/user"
+            <Nuxt-link v-if="role_id === 1" to="user"
                 class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white"
-                :class="{ 'router-link-exact-active': $route.path.startsWith('/users') }">
+                :class="{ 'router-link-exact-active': $route.path.startsWith('/user') }">
                 <font-awesome-icon :icon="['fas', 'user']"
                     class="mr-2 text-[1.5rem] transition-all min-w-[24px] w-[24px]" />
                 <span class="transition-all text whitespace-nowrap"
@@ -90,17 +88,17 @@ export default {
             <ul v-show="isSubMenuVisible && is_expanded" :class="`${is_expanded ? 'opacity-1' : 'opacity-0'}`"
                 class="transition-all">
                 <li>
-                    <Nuxt-link v-if="role_id === 1" to="/money/"
+                    <Nuxt-link v-if="role_id === 1" to="/monthlyFee/"
                         class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white">
                         <span class="ml-10">Bill</span>
                     </Nuxt-link>
-                     <Nuxt-link v-else  to="/money/unpaidBill"
+                     <Nuxt-link v-else to="/monthlyFee/unpaidBill"
                             class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white">
                             <span class="ml-10"> Unpaid Bill</span>
                         </Nuxt-link>
                 </li>
                 <li>
-                    <Nuxt-link v-if="role_id === 1" to="/money/list"
+                    <Nuxt-link v-if="role_id === 1" to="/monthlyFee/list"
                         :class="{ 'router-link-exact-active': $route.path.startsWith('/money/list') }"
                         class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white">
                         <span class="ml-10">List
@@ -115,7 +113,7 @@ export default {
 
                 </li>
             </ul>
-            <Nuxt-link v-if="role_id === 1" to="/authorization"
+            <Nuxt-link v-if="role_id === 1" to="/auth/permissionManagement"
                 class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white">
                 <font-awesome-icon :icon="['fas', 'people-arrows']"
                     class="mr-2 text-[1.5rem] transition-all min-w-[24px] w-[24px]" />
