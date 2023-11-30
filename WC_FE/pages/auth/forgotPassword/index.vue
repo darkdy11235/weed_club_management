@@ -55,9 +55,7 @@ input {
 </template>
 
 <script setup>
-import axios from 'axios'
-import { notify, useNotification } from '@kyvg/vue3-notification'
-
+import { axios } from '../../../utils/api/axios'
 import { useToast } from 'vue-toastification'
 const toast = useToast()
 
@@ -73,7 +71,7 @@ const resetPass = async () => {
   data.value.push({ email: email.value })
 
   await axios
-    .post(`${API_BE}/api/forgot-password`, data.value)
+    .post('/forgot', { email: email.value })
     .then((response) => {
       if (response.status) {
         useNotification(
@@ -94,7 +92,6 @@ const resetPass = async () => {
           type: 'warn',
         })
       )
-
       console.log(error)
     })
 }
