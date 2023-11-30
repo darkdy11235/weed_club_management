@@ -76,7 +76,6 @@ const onDelete = (id) => {
       });
 };
 
-
 const fetchData = async () => {
   try {
     const response = await axios.get(`${API_BE}/api/v1/users`);
@@ -126,9 +125,6 @@ const addUser = () => {
   //   console.log(authStore.isAuth);
   router.push('/users/createUser');
 };
-
-
-
 
 </script>
 

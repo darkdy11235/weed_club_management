@@ -45,8 +45,7 @@ input {
 
 <script setup>
 import { useRoute } from 'vue-router'
-import axios from 'axios'
-import { notify, useNotification } from '@kyvg/vue3-notification'
+import { axios } from '../../../utils/api/axios'
 const route = useRoute()
 
 const config = useRuntimeConfig()
@@ -63,10 +62,10 @@ const data = ref([])
 const router = useRouter()
 const URL_BE = config.public.API_BASE_BE
 const resetPass = async () => {
-  data.value.push({ passwordNew: passwordNew.value })
+  data.value.push({ password: passwordNew.value })
   const DataPassword = data.value[0]
   await axios
-    .post(`${API_BE}/api/reset-password?token=${token}`, DataPassword)
+    .post(`${API_BE}/api/password/reset`, DataPassword)
     .then((response) => {
       if (response.status) {
         useNotification(
