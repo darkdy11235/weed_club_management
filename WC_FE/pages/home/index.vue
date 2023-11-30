@@ -1,13 +1,8 @@
-<script setup>
-
-
-</script>
+<script setup></script>
 
 <template>
   <NuxtLayout name="custom">
-    <div>
-      this is home page
-    </div>
+    <div>this is home page</div>
   </NuxtLayout>
 </template>
 

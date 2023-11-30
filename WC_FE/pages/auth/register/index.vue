@@ -17,98 +17,148 @@
           </h1>
 
           <form @submit="register()" class="space-y-4" action="#">
-            <div>
-              <label
-                for="email"
-                class="block mb-2 text-sm font-medium text-secondary"
-                >Name</label
-              >
-              <input
-                type="email"
-                name="email"
-                id="email"
-                class="w-full p-2.5 rounded-lg focus:ring-primary-600 focus:border-primary-600 text-secondary"
-                v-model="name"
-                placeholder="Name"
-                required
-              />
-            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="email"
+                  class="block mb-2 text-sm font-medium text-secondary"
+                  >Name</label
+                >
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  class="w-full p-2.5 rounded-lg focus:ring-primary-600 focus:border-primary-600 text-secondary"
+                  v-model="name"
+                  placeholder="Name"
+                  required
+                />
+              </div>
 
-            <div>
-              <label
-                for="email"
-                class="block mb-2 text-sm font-medium text-secondary"
-                >Age</label
-              >
-              <input
-                v-model="age"
-                type="number"
-                class="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
-                required
-              />
-            </div>
-            <div>
-              <label
-                for="email"
-                class="block mb-2 text-sm font-medium text-secondary"
-                >Gender</label
-              >
-              <select
-                v-model="gender"
-                class="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
-              >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="other">Khác</option>
-              </select>
-            </div>
-            <div>
-              <label
-                for="email"
-                class="block mb-2 text-sm font-medium text-secondary"
-                >Username</label
-              >
-              <input
-                type="email"
-                name="email"
-                id="email"
-                class="w-full p-2.5 rounded-lg focus:ring-primary-600 focus:border-primary-600 text-secondary"
-                v-model="username"
-                placeholder="Username"
-                required
-              />
-            </div>
-            <div>
-              <label
-                for="password"
-                class="block mb-2 text-sm font-medium text-secondary"
-                >Password</label
-              >
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="••••••••"
-                class="w-full p-2.5 rounded-lg focus:ring-primary-600 focus:border-primary-600"
-                required
-                v-model="password"
-              />
-            </div>
-            <div>
-              <label
-                for="email"
-                class="block mb-2 text-sm font-medium text-secondary"
-                >Email</label
-              >
-              <input
-                type="email"
-                name="email"
-                id="email"
-                class="w-full p-2.5 rounded-lg focus:ring-primary-600 focus:border-primary-600 text-secondary"
-                v-model="email"
-                placeholder="Email"
-                required
-              />
+              <div>
+                <label
+                  for="email"
+                  class="block mb-2 text-sm font-medium text-secondary"
+                  >Age</label
+                >
+                <input
+                  v-model="age"
+                  type="number"
+                  class="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="username"
+                  class="block mb-2 text-sm font-medium text-secondary"
+                  >Username</label
+                >
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  class="w-full p-2.5 rounded-lg focus:ring-primary-600 focus:border-primary-600 text-secondary"
+                  v-model="username"
+                  placeholder="Username"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="email"
+                  class="block mb-2 text-sm font-medium text-secondary"
+                  >Gender</label
+                >
+                <select
+                  v-model="gender"
+                  class="w-full px-4 py-2 border rounded focus:outline-none focus:border-blue-500"
+                >
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="other">Khác</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  for="email"
+                  class="block mb-2 text-sm font-medium text-secondary"
+                  >Email</label
+                >
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  class="w-full p-2.5 rounded-lg focus:ring-primary-600 focus:border-primary-600 text-secondary"
+                  v-model="email"
+                  placeholder="Email"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="phone"
+                  class="block mb-2 text-sm font-medium text-secondary"
+                  >Phone</label
+                >
+                <input
+                  type="text"
+                  name="phone"
+                  id="phone"
+                  class="w-full p-2.5 rounded-lg focus:ring-primary-600 focus:border-primary-600 text-secondary"
+                  v-model="phone"
+                  placeholder="Phone"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="password"
+                  class="block mb-2 text-sm font-medium text-secondary"
+                  >Password</label
+                >
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="••••••••"
+                  class="w-full p-2.5 rounded-lg focus:ring-primary-600 focus:border-primary-600"
+                  required
+                  v-model="password"
+                />
+              </div>
+              <div>
+                <label
+                  for="confirmPassword"
+                  class="block mb-2 text-sm font-medium text-secondary"
+                  >Confirm Password</label
+                >
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  id="confirmPassword"
+                  placeholder="••••••••"
+                  class="w-full p-2.5 rounded-lg focus:ring-primary-600 focus:border-primary-600"
+                  required
+                  v-model="confirmPassword"
+                />
+              </div>
+              <div class="col-span-2">
+                <label
+                  for="address"
+                  class="block mb-2 text-sm font-medium text-secondary"
+                  >Address</label
+                >
+                <input
+                  type="text"
+                  name="address"
+                  id="address"
+                  class="w-full p-2.5 rounded-lg focus:ring-primary-600 focus:border-primary-600 text-secondary"
+                  v-model="address"
+                  placeholder="Address"
+                  required
+                />
+              </div>
             </div>
 
             <v-btn
@@ -128,34 +178,34 @@
 </template>
 
 <script setup>
-import axios from 'axios'
+import { axios } from '../../../utils/api/axios'
 import { useToast } from 'vue-toastification'
 const toast = useToast()
 
 const router = useRouter()
 
-const config = useRuntimeConfig()
-const URL_BE = config.public.API_BASE_BE
-
 const username = ref('')
 const password = ref('')
+const confirmPassword = ref('')
 const email = ref('')
+const address = ref('')
 const name = ref('')
 const age = ref('')
+const phone = ref('')
 const gender = ref('')
 
 const register = async () => {
   try {
-    const response = await axios.post(`${URL_BE}/api/register`, {
+    const response = await axios.post(`/register`, {
       name: username.value,
       password: password.value,
       name: name.value,
       gender: gender.value,
       email: email.value,
       age: parseInt(age.value),
-      address: 'test',
-      phone: '12515116',
-      password_confirmation: '123456',
+      address: address.value,
+      phone: phone.value,
+      password_confirmation: confirmPassword.value,
     })
     console.log('response', response)
     if (response.data) {

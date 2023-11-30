@@ -1,41 +1,36 @@
 <script setup>
-import axios from 'axios'
 import { useToast } from 'vue-toastification'
-
+import { axios } from '../../../utils/api/axios'
+import { localStorageClient } from '~/utils/helper/localStorage'
 const toast = useToast()
-
-const config = useRuntimeConfig()
-const URL_BE = config.public.API_BASE_BE
 
 const username = ref('')
 const password = ref('')
 const router = useRouter()
 
 const login = async () => {
-  await axios
-    .post(`${URL_BE}/api/login`, {
-      email: username.value,
-      password: password.value,
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        const token = response.data.token
-        localStorage.setItem('accessToken', JSON.stringify(token))
-        toast.success(response.data.message)
-        router.push('/home')
-      }
-    })
-    .catch((error) => {
-      console.log(error)
-      toast.error('Login failed')
-    })
+  const { status, data } = await axios.post('/login', {
+    email: username.value,
+    password: password.value,
+  })
+
+  if (status === 200 && data) {
+    localStorageClient.setItem('accessToken', data.token)
+    const response = await axios.get('/user')
+    const { user } = response.data
+    if (user) {
+      router.push('/home')
+    }
+  }
 }
+
 const checkToken = async () => {
   const accessToken = localStorage.getItem('accessToken')
   if (accessToken) {
     window.location.href = router.resolve('/home').href
   }
 }
+
 onMounted(async () => {
   await checkToken()
 })
@@ -131,7 +126,7 @@ onMounted(async () => {
                 href="#"
                 class="font-medium text-primary hover:underline dark:text-primary-500"
               >
-                <NuxtLink to="/Register">Sign up </NuxtLink>
+                <NuxtLink to="/auth/register">Sign up </NuxtLink>
               </a>
             </p>
           </form>

@@ -125,7 +125,6 @@ const assignRoles = async () => {
         )
       }
     }
-
     console.log(allPermission.value)
     await axios
       .post(`${URL_BE}/api/v1/author/${selectedRoleId.value}/AddPermissions/`, {
