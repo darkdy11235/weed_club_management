@@ -5,45 +5,62 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\ResetsPasswords;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Validation\ValidationException;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\QueryException;
 
 class ResetPasswordController extends Controller
 {
-    public function resetPassword(Request $request)
+    use ResetsPasswords;
+    /**
+     * Where to redirect users after resetting their password.
+     *
+     * @var string
+     */
+    protected $redirectTo = RouteServiceProvider::HOME;
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
     {
-        $request->validate([
-            'email' => 'required|email',
-            'token' => 'required',
+        $this->middleware('guest');
+    }
+    public function reset(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' =>'required|email',
+            'password' => 'required|string|confirmed',
             'password' => 'required|min:6|confirmed',
+        ],
+        [
+            'email.required' => 'Email is required.',
+            'email.email' => 'Email is invalid.',
+            'password.required' => 'Password is required.',
+            'password.min' => 'Password must be at least 6 characters.',
+            'password.confirmed' => 'Password does not match.',
         ]);
 
-        $email = $request->input('email');
-        $token = $request->input('token');
-        $password = $request->input('password');
-
-        $user = User::where('email', $email)->first();
-
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
+        // Check for validation errors
+        if ($validator->fails()) {
+            return response()->json(['error validator' => $validator->errors()], 400);
         }
 
-        // Validate the token
-        $reset = DB::table('password_reset_tokens')
-            ->where('email', $email)
-            ->where('token', Hash::make($token))
-            ->first();
-
-        if (!$reset) {
-            return response()->json(['error' => 'Invalid or expired token'], 400);
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            $user->password = Hash::make($request->password);
+            $user->save();
+            return response()->json(['message' => 'Password reset successfully.'], 200);
+        } else {
+            return response()->json(['message' => 'We can\'t find a user with that e-mail address.'], 404);
         }
-
-        // Update the user's password
-        $user->password = Hash::make($password);
-        $user->save();
-
-        // Remove the token record
-        DB::table('password_reset_tokens')->where('email', $email)->delete();
-
-        return response()->json(['message' => 'Password reset successfully']);
+        return response()->json(['message' => 'We can\'t find a user with that e-mail address.'], 404);
     }
-
 }

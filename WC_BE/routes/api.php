@@ -19,8 +19,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [RegistrationController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/password/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
-Route::post('/password/reset', [ResetPasswordController::class, 'resetPassword']);
+Route::post('/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('/password-reset', [ResetPasswordController::class, 'reset'])->name('password-reset');
 
 // Protected routes with authentication middleware
 Route::middleware(['auth:sanctum'])->group(function () {
