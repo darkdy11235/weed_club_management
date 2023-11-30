@@ -4,8 +4,8 @@
 //   import Cookies from 'js-cookie';
 //   import { notify } from '@kyvg/vue3-notification';
 
-  import UserCard from "~/components/UserCard.vue";
-  import SearchItem from "~/components/SearchItem.vue";
+  import UserCard from "@/components/modules/users/UserCard.vue";
+  import SearchItem from "@/components/share/SearchItem.vue";
 
   const emits = defineEmits(['clickShowPopup', 'clickCloseAllPopup', 'clickOnDelete', 'clickEditUser', 'update:searchKeyword']);
 

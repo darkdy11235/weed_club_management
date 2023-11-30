@@ -17,7 +17,7 @@ export default defineComponent({
             <div class="pt-[calc(2.5rem+97px)] p-10 bg-[#f5f5f5]">
                 <slot />
             </div>
-            <!-- <Footer /> -->
+             <Footer />
         </div>
     </div>
 </template>
