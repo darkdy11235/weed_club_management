@@ -12,6 +12,9 @@
   const config= useRuntimeConfig();
   const API_BE = config.public.API_BASE_BE;
 
+  const accessToken = localStorage.getItem('token');
+  headers = {'Authorization': `Bearer ${accessToken}`}
+
   const userData = ref([]);
   const searchKeyword = ref("");
   const router = useRouter();
@@ -55,7 +58,7 @@
   const onDelete = (id) => {
       closeAllPopup();
       axios 
-          .delete(`${API_BE}/api/user/${id}`)
+          .delete(`${API_BE}/api/users/${id}`, { headers })
           .then((response) => {
           notify({
               title: "Delete Success",
@@ -77,7 +80,7 @@
 
   const fetchData = async () => {
       try {
-          const response = await axios.get(`${API_BE}/api/user`);
+          const response = await axios.get(`${API_BE}/api/users`, { headers });
           return userData.value = response.data;
       }
       catch (error) {
@@ -118,11 +121,11 @@
 
   const editUser = (id) => {
       closeAllPopup();
-      router.push(`/admin/user/${id}`);
+      router.push(`/user/${id}`);
   };
   const addUser = () => {
     //   console.log(authStore.isAuth);
-      router.push('/admin/users/createUser');
+      router.push('/user/createUser');
   };
 
   
