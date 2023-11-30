@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PermissionController extends Controller
 {
@@ -55,11 +56,12 @@ class PermissionController extends Controller
         return response()->json(['message' => 'Permission created successfully', 'permission' => $permission]);
     }
 
-    public function updatePermission(Request $request, $id)
+    public function updatePermission(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|unique:permissions,name,' . $id,
-            'slug' => 'required|string|unique:permissions,slug,' . $id,
+            'id' => 'required|integer',
+            'name' => 'required|string|unique:permissions,name,',
+            'slug' => 'required|string|unique:permissions,slug,',
             'description' => 'nullable|string',
             'create' => 'required|boolean',
             'read' => 'required|boolean',
@@ -71,7 +73,7 @@ class PermissionController extends Controller
             return response()->json(['error validator' => $validator->errors()], 400);
         }
 
-        $permission = Permission::find($id);
+        $permission = Permission::find($request->input('id'));
 
         if (!$permission) {
             return response()->json(['error' => 'Permission not found'], 404);
@@ -90,9 +92,12 @@ class PermissionController extends Controller
         return response()->json(['message' => 'Permission updated successfully', 'permission' => $permission]);
     }
 
-    public function deletePermission($id)
+    public function deletePermission(Request $request)
     {
-        $permission = Permission::find($id);
+        $validator = Validator::make($request->all(), [
+            'id' => '',
+        ]);
+        $permission = Permission::find($request->input('id'));
 
         if (!$permission) {
             return response()->json(['error' => 'Permission not found'], 404);

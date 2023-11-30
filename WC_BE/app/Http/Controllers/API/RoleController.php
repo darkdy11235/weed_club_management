@@ -51,17 +51,18 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateRole(Request $request, $id)
+    public function updateRole(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'role_name' => 'required|string|unique:roles,role_name,' . $id,
+            'id' =>  'required|exists:roles,id',
+            'role_name' => 'required|string|unique:roles,role_name,',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error validator' => $validator->errors()], 400);
         }
 
-        $role = Role::findOrFail($id);
+        $role = Role::findOrFail($request->input('id'));
         $role->update([
             'role_name' => $request->input('role_name'),
         ]);
@@ -75,9 +76,12 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteRole($id)
+    public function deleteRole(Request $request)
     {
-        $role = Role::findOrFail($id);
+        $validator = Validator::make($request->all(), [
+            'id' =>  'required|exists:roles,id',
+        ]);
+        $role = Role::findOrFail($request->input('id'));
         $role->delete();
 
         return response()->json(['message' => 'Role deleted successfully']);
