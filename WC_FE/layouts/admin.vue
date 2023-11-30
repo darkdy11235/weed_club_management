@@ -10,7 +10,7 @@
            <slot />
        </div>
 
-        <Footer />
+<!--        <Footer />-->
    </div>
   </div>
 </template>

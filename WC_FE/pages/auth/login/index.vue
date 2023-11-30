@@ -2,11 +2,13 @@
 import { useToast } from 'vue-toastification'
 import { axios } from '../../../utils/api/axios'
 import { localStorageClient } from '~/utils/helper/localStorage'
+import { userInfo } from '@/stores/userInfo.js'
 const toast = useToast()
 
 const username = ref('')
 const password = ref('')
 const router = useRouter()
+const userInfoStore = userInfo()
 
 const login = async () => {
   const { status, data } = await axios.post('/login', {
@@ -18,6 +20,7 @@ const login = async () => {
     localStorageClient.setItem('accessToken', data.token)
     const response = await axios.get('/user')
     const { user } = response.data
+    userInfoStore.userInfo = user
     if (user) {
       router.push('/home')
     }

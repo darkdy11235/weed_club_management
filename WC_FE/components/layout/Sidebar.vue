@@ -55,7 +55,7 @@ export default {
                 <span class="transition-all text whitespace-nowrap"
                     :class="`${is_expanded ? 'opacity-1' : 'opacity-0'}`">Dashboard</span>
             </Nuxt-link>
-            <Nuxt-link v-if="role_id === 1" to="user"
+            <Nuxt-link v-if="role_id === 1" to="/admin/user"
                 class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white"
                 :class="{ 'router-link-exact-active': $route.path.startsWith('/user') }">
                 <font-awesome-icon :icon="['fas', 'user']"
@@ -63,7 +63,7 @@ export default {
                 <span class="transition-all text whitespace-nowrap"
                     :class="`${is_expanded ? 'opacity-1' : 'opacity-0'}`">Users</span>
             </Nuxt-link>
-             <Nuxt-link v-else :to=" `admin/user/${user_id}` "
+             <Nuxt-link v-else :to=" `/admin/user/${user_id}` "
                     class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white"
                     :class="{ 'router-link-exact-active': $route.path.startsWith('/users') }">
                     <font-awesome-icon :icon="['fas', 'user']"
@@ -88,7 +88,7 @@ export default {
             <ul v-show="isSubMenuVisible && is_expanded" :class="`${is_expanded ? 'opacity-1' : 'opacity-0'}`"
                 class="transition-all">
                 <li>
-                    <Nuxt-link v-if="role_id === 1" to="/monthlyFee/"
+                    <Nuxt-link v-if="role_id === 1" to="/monthlyFee"
                         class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white">
                         <span class="ml-10">Bill</span>
                     </Nuxt-link>
