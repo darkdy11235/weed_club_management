@@ -8,18 +8,20 @@ const { toggleMenu } = store;
 const is_expanded = computed(() => store.is_expanded);
 
 
-const decoded = useDecodeTokenStore()
-decoded.decodeToken
-
-const role_id = decoded.decoded.role
-const user_id = decoded.decoded.user_id
+// const decoded = useDecodeTokenStore()
+// decoded.decodeToken
+// console.log('decoded.decodeToken', decoded.decodeToken)
+// console.log('decoded.decoded', decoded.decoded)
+const role_id = 1
+// const role_id = decoded.decoded.role
+// const user_id = decoded.decoded.user_id
 
 </script>
 
 <script>
 export default {
     mounted() {
-        if (this.$route.path.startsWith('/monthlyFee') || this.$route.path.startsWith('/paymentHistory')) {
+        if (this.$route.path.startsWith('/monthlyFee') || this.$route.path.startsWith('payment/paymentHistory')) {
             this.isSubMenuVisible = true;
         }
     },
@@ -55,7 +57,7 @@ export default {
                 <span class="transition-all text whitespace-nowrap"
                     :class="`${is_expanded ? 'opacity-1' : 'opacity-0'}`">Dashboard</span>
             </Nuxt-link>
-            <Nuxt-link v-if="role_id === 1" to="/users"
+            <Nuxt-link v-if="role_id === 1" to="admin/user"
                 class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white"
                 :class="{ 'router-link-exact-active': $route.path.startsWith('/users') }">
                 <font-awesome-icon :icon="['fas', 'user']"
@@ -63,7 +65,7 @@ export default {
                 <span class="transition-all text whitespace-nowrap"
                     :class="`${is_expanded ? 'opacity-1' : 'opacity-0'}`">Users</span>
             </Nuxt-link>
-             <Nuxt-link v-else :to=" `/users/${user_id}` "
+             <Nuxt-link v-else :to=" `admin/user/${user_id}` "
                     class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white"
                     :class="{ 'router-link-exact-active': $route.path.startsWith('/users') }">
                     <font-awesome-icon :icon="['fas', 'user']"

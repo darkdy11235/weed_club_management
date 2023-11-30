@@ -1,5 +1,13 @@
 <script>
+import Header from "~/components/layout/Header.vue";
+import Sidebar from "~/components/layout/Sidebar.vue";
+import Footer from "~/components/layout/Footer.vue";
 export default defineComponent({
+    components: {
+      Header,
+      Sidebar,
+      Footer
+    },
     setup() {
         const store = useSidebarStore();
         const { toggleMenu } = store;
