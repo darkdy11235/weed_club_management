@@ -2,7 +2,9 @@
 
 <template>
   <NuxtLayout name="custom">
-    <div>this is home page</div>
+    <div>
+        <img src="../../assets/img/home.png" alt="home">
+    </div>
   </NuxtLayout>
 </template>
 
