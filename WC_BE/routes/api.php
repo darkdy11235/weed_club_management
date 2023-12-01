@@ -42,6 +42,23 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/bills/{billId}', [BillController::class, 'deleteBill'])
     ->middleware('checkPermission:delete_bill');
     // Retrieve paid bills for a specific user
+
+
+    Route::get('/payment', [PaymentController::class, 'getPaymentsByUser']);
+    Route::post('/payments', [PaymentController::class, 'create']);
+
+    // Get all payments
+    Route::get('/payments', [PaymentController::class, 'index']);
+
+    // Get a specific payment by ID
+    Route::get('/payments/{id}', [PaymentController::class, 'show']);
+
+    // Update a payment by ID
+    Route::put('/payments/{id}', [PaymentController::class, 'update']);
+
+    // Delete a payment by ID
+    Route::delete('/payments/{id}', [PaymentController::class, 'destroy']);
+
     Route::get('/users/{userId}/paid-bills', [BillController::class, 'getPaidBillsByUserId']);
 
     Route::get('/paidBills', [UserController::class, 'getPaidBills']);
@@ -61,6 +78,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // get bills by year
     Route::get('/get-bills/{year}', [UserController::class, 'getBillsByYear'])
     ->middleware('checkPermission:read_bill');
+
+
     // Routes for managing users
     Route::get('/users', [UserController::class, 'index'])
     ->middleware('checkPermission:read_user');
@@ -87,6 +106,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/user/assign-permission', [RolePermissionController::class, 'assignPermission']);
         Route::post('/user/remove-permission', [RolePermissionController::class, 'removePermission']);
     });
+
+
 
     // Routes for managing role
     Route::get('/roles', [RoleController::class, 'getAllRoles'])
