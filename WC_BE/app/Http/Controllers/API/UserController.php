@@ -526,4 +526,10 @@ class UserController extends Controller
         }
     }
 
+    public function search($name)
+    {
+        $users = User::where('name', 'like', '%' . $name . '%')->get();
+
+        return response()->json(['user' => $users]);
+    }
 }
