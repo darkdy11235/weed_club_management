@@ -13,11 +13,13 @@ use App\Http\Controllers\API\RolePermissionController;
 use App\Http\Controllers\API\PermissionController;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\API\ForgotPasswordController;
+use App\Http\Controllers\API\VerificationController;
 use App\Http\Controllers\API\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 // Public routes
 
 Route::post('/register', [RegistrationController::class, 'register']);
+Route::post('/verify-user', [VerificationController::class, 'verifyUserByCode']);
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
 Route::post('/password-reset', [ResetPasswordController::class, 'reset'])->name('password-reset');

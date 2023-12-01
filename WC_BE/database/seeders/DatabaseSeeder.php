@@ -85,6 +85,8 @@ class DatabaseSeeder extends Seeder
             'address' => '44 thanh long',
             'email' => 'htk11235@gmail.com',
             'password' => bcrypt('admin@example.com'),
+            'verified' => true
+
         ]);
         
         UserRole::create([

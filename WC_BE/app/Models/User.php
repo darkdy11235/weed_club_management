@@ -29,6 +29,8 @@ class User extends Authenticatable
         'password',
         'avatar',
         'remember_token',
+        'verified',
+        'verification_code',
         'password_reset_token',
         'password_reset_token_expiry',
         'status',
