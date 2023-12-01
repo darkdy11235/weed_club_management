@@ -145,7 +145,7 @@ import billFormEdit from './list/billFormEdit.vue'
 import {axios} from '@/utils/api/axios';
 import { useToast } from 'vue-toastification';
 import { useBillStore } from '@/stores/bill';
-
+import { DateTime } from 'luxon';
 export default {
     components: {
         Popup,
@@ -169,6 +169,10 @@ export default {
                 currentYear: new Date().getFullYear(),
                 amount: '',
                 selected: [],
+                payer: 'user',
+                billAt: DateTime.local().toFormat('yyyy-MM-dd HH:mm:ss'),
+                created_by:'admin'
+            
             },
             billEdit: {
                 title: '',
@@ -301,6 +305,7 @@ export default {
                     this.billEdit.currentYear = res.data[0].year;
                     this.billEdit.amount = res.data[0].fee;
                     this.billEdit.selected = res.data[0].payer;
+                
                 }
             } catch (err) {
                 console.log(err);
@@ -315,6 +320,10 @@ export default {
                 currentYear: new Date().getFullYear(),
                 amount: '',
                 selected: [],
+                payer:'user',
+                billAt: DateTime.local().toFormat('yyyy-MM-dd HH:mm:ss'),
+                created_by: 'admin'
+                
             };
         },
         handleOpenEditBill(id) {
@@ -334,8 +343,9 @@ export default {
                 month: this.bill.currentMonth,
                 year: this.bill.currentYear,
                 fee: Number(this.bill.amount),
-                payers: this.bill.selected,
-                create_by: this.userId,
+                payer: this.bill.payer,
+                created_by: this.bill.created_by,
+                bill_at: this.bill.billAt,
             })
                 .then(res => {
                     // console.log(res);
@@ -351,6 +361,7 @@ export default {
                 })
                 .finally(() => {
                     this.isLoading = false;
+                    toast.success('Create bill successfully!');
                 });
         },
         async editBill(id) {
