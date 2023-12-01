@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\QueryException;
+use App\Mail\VerificationCodeMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+
 
 class RegistrationController extends Controller
 {
@@ -50,11 +54,12 @@ class RegistrationController extends Controller
                 'address' => $request->input('address'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
+                'verification_code' => Str::random(40),
             ]);
 
-            $token = $user->createToken('api-token')->plainTextToken;
+            Mail::to($user->email)->send(new VerificationCodeMail($user->verification_code));
 
-            return response()->json(['token' => $token]);
+            return response()->json(['message' => 'Verification Code sent successfully, please check your email']);
         } catch (QueryException $e) {
             if ($e->errorInfo[1] == 1062) {
                 // MySQL error code for unique constraint violation
