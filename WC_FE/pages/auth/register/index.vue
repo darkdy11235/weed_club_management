@@ -174,6 +174,9 @@
         </div>
       </div>
     </div>
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="loader"></div>
+    </div>
   </section>
 </template>
 
@@ -193,9 +196,11 @@ const name = ref('')
 const age = ref('')
 const phone = ref('')
 const gender = ref('')
+const isLoading = ref(false);
 
 const register = async () => {
   try {
+    isLoading.value = true
     const response = await axios.post(`/register`, {
       name: username.value,
       password: password.value,
@@ -209,12 +214,13 @@ const register = async () => {
     })
     console.log('response', response)
     if (response.data) {
-      toast.success('Register successfully')
-      router.push('/')
+      isLoading.value = false
+      toast.success('Verification Code sent successfully, please check your email')
+      router.push(`/auth/emailConfirmation/${email.value}`)
     }
   } catch (error) {
     console.log(error)
-    toast.error('Register failed')
+    toast.error(error.message)
   }
 }
 </script>
@@ -224,5 +230,28 @@ input {
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+.loading-overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 4px solid #3498db;
+  width: 30px;
+  height: 30px;
+  -webkit-animation: spin 2s linear infinite;
+  /* Safari */
+  animation: spin 2s linear infinite;
 }
 </style>
