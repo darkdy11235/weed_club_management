@@ -2,17 +2,12 @@
 <script setup>
 
   import { ref, onMounted } from 'vue';
-  import axios from 'axios';
+  import { axios } from "../../../utils/api/axios.js";
   import { useRoute, useRouter } from 'vue-router';
-  import { notify } from '@kyvg/vue3-notification';
 
   
   const config= useRuntimeConfig();
   const URL_BE = config.public.API_BASE_BE;
-
-  const accessToken = localStorage.getItem('token');
-  let headers;
-  headers = {'Authorization': `Bearer ${accessToken}`}
 
 
   import displayIMG from '../../../middleware/displayIMG';
@@ -91,20 +86,12 @@
       errorValue.value.password = "";
     }
 
-    // if (DataUser.value.avatar == "") {
-    //   isValue = false;
-    //   errorValue.value.avatar = "avatar is required";
-    // } else {
-    //   errorValue.value.avatar = "";
-    // }
-
     if (DataUser.value.status == "") {
       isValue = false;
       errorValue.value.status = "status is required";
     } else {
       errorValue.value.status = "";
     }
-    // console.log(errorValue.value);
     return isValue;
   }
   

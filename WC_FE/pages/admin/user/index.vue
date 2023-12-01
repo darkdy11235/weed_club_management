@@ -1,7 +1,4 @@
 <script setup>
-//   import axios from "axios";
-//   import Cookies from 'js-cookie';
-//   import { notify } from '@kyvg/vue3-notification';
 import { axios } from "~/utils/api/axios.js";
 
 import UserCard from "~/components/modules/users/UserCard.vue";
@@ -22,12 +19,6 @@ const userData = ref([]);
 const searchKeyword = ref("");
 const router = useRouter();
 
-//   const isLogin = () => {
-//       const token = Cookies.get('auth_token');
-//       if (!token) {
-//           router.push({ name: 'Home' });
-//       }
-//   };
 
 const closeAllPopup = () => {
   console.log("closeAllPopup");
@@ -124,7 +115,6 @@ const editUser = (id) => {
   router.push(`/user/${id}`);
 };
 const addUser = () => {
-  //   console.log(authStore.isAuth);
   router.push("/admin/user/createUser");
 };
 </script>
