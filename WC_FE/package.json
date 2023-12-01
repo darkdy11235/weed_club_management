@@ -36,6 +36,7 @@
     "axios": "^1.5.1",
     "dotenv": "^16.3.1",
     "js-cookie": "^3.0.5",
+    "luxon": "^3.4.4",
     "nitropack": "^2.8.0",
     "pinia": "^2.1.7",
     "vue-jwt-decode": "^0.1.0",

@@ -48,7 +48,7 @@
                             <th class="px-6 bg-[#fafafa] text-start text-[#262626] font-normal">Title</th>
                             <th class="px-6 bg-[#fafafa] text-start text-[#262626] font-normal">Description</th>
                             <th class="px-6 bg-[#fafafa] text-start text-[#262626] font-normal">Amount</th>
-                            <th class="px-6 bg-[#fafafa] text-start text-[#262626] font-normal">Username</th>
+                            <!-- <th class="px-6 bg-[#fafafa] text-start text-[#262626] font-normal">Username</th> -->
                             <th class="px-6 bg-[#fafafa] text-start text-[#262626] font-normal">Create Date</th>
                             <th class="w-[10%] text-start text-[#262626] font-normal px-6 bg-[#fafafa]">Action</th>
                         </tr>
@@ -61,37 +61,37 @@
                             </td>
                             <td class="px-6 border-b border-r border-[#f0f0f0] text-[#595959]">{{ itemBill.fee }}
                             </td>
-                            <td class="px-6 border-b border-r border-[#f0f0f0] text-[#595959]">{{ itemBill.name }}
-                            </td>
+                            <!-- <td class="px-6 border-b border-r border-[#f0f0f0] text-[#595959]">{{ itemBill.name }}
+                            </td> -->
                             <td class="px-6 border-b border-r border-[#f0f0f0] text-[#595959]">{{
                                 formatDate(itemBill.created_at) }}
                             </td>
                             <td class="px-6 border-b border-[#f0f0f0] text-[#595959] align-middle">
                                 <div class="text-center w-100">
                                     <button class="text-blue-500"
-                                        @click="handleOpenEditBill(itemBill.bill_id)"><font-awesome-icon
+                                        @click="handleOpenEditBill(itemBill.id)"><font-awesome-icon
                                             :icon="['fas', 'edit']" /></button>
-                                    <Popup :is-open="openPopupsEditId[itemBill.bill_id]"
-                                        @update-is-open="handleCloseEditBill(itemBill.bill_id)">
+                                    <Popup :is-open="openPopupsEditId[itemBill.id]"
+                                        @update-is-open="handleCloseEditBill(itemBill.id)">
                                         <template #popup-header>
                                             <h2 class="text-2xl font-bold text-center text-blue-500">Edit Bill for {{
                                                 itemBill.name }}</h2>
                                         </template>
                                         <template #default>
-                                            <billForm :bill="billEdit"></billForm>
+                                            <billFormEdit :bill="billEdit"></billFormEdit>
                                         </template>
                                         <template #popup-footer>
-                                            <button @click="editBill(itemBill.bill_id)"
+                                            <button @click="editBill(itemBill.id)"
                                                 class="p-3 text-white bg-blue-500 rounded-md hover:bg-blue-400">
                                                 Update
                                             </button>
                                         </template>
                                     </Popup>
                                     <button class="ml-3 text-red-500"
-                                        @click="openDeleteBill(itemBill.bill_id)"><font-awesome-icon
+                                        @click="openDeleteBill(itemBill.id)"><font-awesome-icon
                                             :icon="['fas', 'trash-alt']" /></button>
-                                    <Popup :is-open="openPopupsDeleteId[itemBill.bill_id]"
-                                        @update-is-open="handleCloseDeleteBill(itemBill.bill_id)" :type="'confirm'">
+                                    <Popup :is-open="openPopupsDeleteId[itemBill.id]"
+                                        @update-is-open="handleCloseDeleteBill(itemBill.id)" :type="'confirm'">
                                         <template #popup-header>
                                             <h2 class="text-2xl font-bold text-center text-blue-500">
                                                 Want to delete this bill?
@@ -102,7 +102,7 @@
                                             Once deleted, it cannot be undone. Do you confirm deletion?
                                         </template>
                                         <template #popup-footer>
-                                            <button @click="deleteBill(itemBill.bill_id)"
+                                            <button @click="deleteBill(itemBill.id)"
                                                 class="p-3 text-white bg-blue-500 rounded-md hover:bg-blue-400">
                                                 Delete
                                             </button>
@@ -144,11 +144,12 @@ import billForm from '~/components/modules/monthlyFee/billForm.vue';
 import { axios } from '@/utils/api/axios';
 import { useToast } from 'vue-toastification';
 import { useBillStore } from '@/stores/bill';
-
+import { DateTime } from 'luxon';
 export default {
     components: {
         Popup,
-        billForm
+        billForm,
+        billFormEdit
     },
     data() {
         return {
@@ -167,13 +168,17 @@ export default {
                 currentYear: new Date().getFullYear(),
                 amount: '',
                 selected: [],
+                payer: 'user',
+                billAt: DateTime.local().toFormat('yyyy-MM-dd HH:mm:ss'),
+                created_by:'admin'
+            
             },
             billEdit: {
                 title: '',
                 desc: '',
-                currentMonth: 11,
-                currentYear: 2023,
-                amount: 2023,
+                currentMonth: '',
+                currentYear: '',
+                amount: '',
                 selected: [],
             },
             currentPage: 1,
@@ -298,16 +303,18 @@ export default {
             }
         },
         async getBillById(id) {
+           
             try {
                 const res = await axios.get(`${this.$config.public.API_BASE_BE}/api/bills/${id}`);
                 console.log(res);
-                if (res.status === 200) {
+                if (res.status === 200 && res.data.length > 0) {
                     this.billEdit.title = res.data[0].fee_type;
                     this.billEdit.desc = res.data[0].description;
                     this.billEdit.currentMonth = res.data[0].month;
                     this.billEdit.currentYear = res.data[0].year;
                     this.billEdit.amount = res.data[0].fee;
                     this.billEdit.selected = res.data[0].payer;
+                
                 }
             } catch (err) {
                 console.log(err);
@@ -323,9 +330,14 @@ export default {
                 currentYear: new Date().getFullYear(),
                 amount: '',
                 selected: [],
+                payer:'user',
+                billAt: DateTime.local().toFormat('yyyy-MM-dd HH:mm:ss'),
+                created_by: 'admin'
+                
             };
         },
         handleOpenEditBill(id) {
+            console.log(id);
             this.openPopupsEditId[id] = true;
             this.getBillById(id);
         },
@@ -335,14 +347,15 @@ export default {
         async createBill() {
             this.isLoading = true;
             const toast = useToast();
-            await axios.post(`${this.$config.public.API_BASE_BE}/api/v1/payment/create-bill`, {
+            await axios.post(`${this.$config.public.API_BASE_BE}/api/bills`, {
                 fee_type: this.bill.title,
                 description: this.bill.desc,
                 month: this.bill.currentMonth,
                 year: this.bill.currentYear,
                 fee: Number(this.bill.amount),
-                payers: this.bill.selected,
-                create_by: this.userId,
+                payer: this.bill.payer,
+                created_by: this.bill.created_by,
+                bill_at: this.bill.billAt,
             })
                 .then(res => {
                     // console.log(res);
@@ -358,6 +371,7 @@ export default {
                 })
                 .finally(() => {
                     this.isLoading = false;
+                    toast.success('Create bill successfully!');
                 });
         },
         async editBill(id) {
@@ -388,7 +402,7 @@ export default {
         },
         async deleteBill(id) {
             // this.listBill = this.listBill.filter(bill => bill.id !== id);
-            await axios.delete(`${this.$config.public.API_BASE_BE}/api/v1/payment/bill/${id}`)
+            await axios.delete(`${this.$config.public.API_BASE_BE}/api/bills/${id}`)
                 .then(res => {
                     if (res.status === 200) {
                         const toast = useToast();
