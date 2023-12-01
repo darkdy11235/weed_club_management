@@ -31,8 +31,7 @@ class User extends Authenticatable
         'remember_token',
         'verified',
         'verification_code',
-        'password_reset_token',
-        'password_reset_token_expiry',
+        'reset_password_code',
         'status',
         'created_by',
     ];

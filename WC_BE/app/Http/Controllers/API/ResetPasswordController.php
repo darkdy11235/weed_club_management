@@ -2,65 +2,57 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Auth\ResetsPasswords;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Validation\ValidationException;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Hash;
 
 class ResetPasswordController extends Controller
 {
-    use ResetsPasswords;
-    /**
-     * Where to redirect users after resetting their password.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
-    public function reset(Request $request)
+    public function resetUserPasswordByCode(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' =>'required|email',
-            'password' => 'required|string|confirmed',
+            'email' => 'required|email',
             'password' => 'required|min:6|confirmed',
-        ],
-        [
-            'email.required' => 'Email is required.',
-            'email.email' => 'Email is invalid.',
-            'password.required' => 'Password is required.',
-            'password.min' => 'Password must be at least 6 characters.',
-            'password.confirmed' => 'Password does not match.',
+            'reset_password_code' => 'required',
+        ], [
+            'email.required' => 'Email is required',
+            'password.required' => 'Password is required',
+            'password.min' => 'Password must be at least 6 characters',
+            'password.confirmed' => 'Password does not match',
+            'reset_password_code.required' => 'Reset code is required',
         ]);
 
-        // Check for validation errors
         if ($validator->fails()) {
-            return response()->json(['error validator' => $validator->errors()], 400);
+            // Return validation errors as JSON
+            return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $user = User::where('email', $request->email)->first();
-        if ($user) {
-            $user->password = Hash::make($request->password);
-            $user->save();
-            return response()->json(['message' => 'Password reset successfully.'], 200);
-        } else {
-            return response()->json(['message' => 'We can\'t find a user with that e-mail address.'], 404);
+        try{
+            $user = User::where('email', $request->email)
+                    ->where('reset_password_code', $request->reset_password_code)
+                    ->first();
+
+            if (!$user) {
+                return response()->json(['message' => 'Invalid reset_password code'], 422);
+            }
+
+            // Mark the user as verified
+            $user->update([
+                'password' => Hash::make($request->input('password')),
+                'reset_password_code' => null,
+            ]);
+            $token = $user->createToken('api-token')->plainTextToken;
+            return response()->json(['token' => $token]);
+        } catch (QueryException $e) {
+            return response()->json(['error' => 'An error occurred while processing your request.'], 500);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-        return response()->json(['message' => 'We can\'t find a user with that e-mail address.'], 404);
     }
 }
+

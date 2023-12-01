@@ -16,20 +16,19 @@ use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\API\VerificationController;
 use App\Http\Controllers\API\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
-// Public routes
 
+// Public routes
 Route::post('/register', [RegistrationController::class, 'register']);
 Route::post('/verify-user', [VerificationController::class, 'verifyUserByCode']);
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/forgot', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+Route::post('/forgot', [ForgotPasswordController::class, 'sendResetCodeEmail']);
+Route::post('/reset', [ResetPasswordController::class,'resetUserPasswordByCode']);
 Route::post('/password-reset', [ResetPasswordController::class, 'reset'])->name('password-reset');
 
 // Protected routes with authentication middleware
 Route::middleware(['auth:sanctum'])->group(function () {
-
     Route::get('/bills', [BillController::class, 'getAllBill'])
     ->middleware('checkPermission:read_bill');
-
     // Create a new bill
     Route::post('/bills', [BillController::class, 'createBill'])
     ->middleware('checkPermission:create_bill');
