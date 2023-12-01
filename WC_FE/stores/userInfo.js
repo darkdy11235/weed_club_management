@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { axios } from "~/utils/api/axios.js";
-export const userInfo = defineStore({
+export let userInfo = defineStore({
   id: "userInfo",
   state: () => ({
     userInfo: null,

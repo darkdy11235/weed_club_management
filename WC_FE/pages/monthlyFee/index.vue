@@ -141,7 +141,7 @@
 import { ref } from 'vue';
 import Popup from '~/components/share/Popup.vue';
 import billForm from '~/components/modules/monthlyFee/billForm.vue';
-import {axios} from '@/utils/api/axios';
+import { axios } from '@/utils/api/axios';
 import { useToast } from 'vue-toastification';
 import { useBillStore } from '@/stores/bill';
 
@@ -178,103 +178,113 @@ export default {
             },
             currentPage: 1,
             itemsPerPage: 8,
-            users: [
-                {
-                    id: 1,
-                    name: 'Frozen Yogurt',
-                    departments: "IT",
-                    join_year: 2020,
-                },
-                {
-                    id: 2,
-                    name: 'Ice cream sandwich',
-                    departments: "MO",
-                    join_year: 2021,
-                },
-                {
-                    id: 3,
-                    name: 'Eclair',
-                    departments: "IT",
-                    join_year: 2023,
-                },
-                {
-                    id: 4,
-                    name: 'Cupcake',
-                    departments: "Designer",
-                    join_year: 2023,
-                },
-                {
-                    id: 5,
-                    name: 'Gingerbread',
-                    departments: "MO",
-                    join_year: 2022,
-                },
-                {
-                    id: 6,
-                    name: 'Jelly bean',
-                    departments: "IT",
-                    join_year: 2020,
-                },
-                {
-                    id: 7,
-                    name: 'Lollipop',
-                    departments: "Designer",
-                    join_year: 2021,
-                },
-                {
-                    id: 8,
-                    name: 'Honeycomb',
-                    departments: "IT",
-                    join_year: 2023,
-                },
-                {
-                    id: 9,
-                    name: 'Donut',
-                    departments: "IT",
-                    join_year: 2022,
-                },
-                {
-                    id: 10,
-                    name: 'KitKat',
-                    departments: "IT",
-                    join_year: 2022,
-                },
-                {
-                    id: 11,
-                    name: 'Honda',
-                    departments: "MO",
-                    join_year: 2022,
-                },
-                {
-                    id: 12,
-                    name: 'Yamaha',
-                    departments: "Designer",
-                    join_year: 2022,
-                },
-                {
-                    id: 13,
-                    name: 'Vision',
-                    departments: "IT",
-                    join_year: 2022,
-                },
-                {
-                    id: 14,
-                    name: 'Element',
-                    departments: "MO",
-                    join_year: 2023,
-                },
-                {
-                    id: 15,
-                    name: 'Panasonic',
-                    departments: "MO",
-                    join_year: 2023,
-                },
+            users: [],
+            // users: [
+            //     {
+            //         id: 1,
+            //         name: 'Frozen Yogurt',
+            //         departments: "IT",
+            //         join_year: 2020,
+            //     },
+            //     {
+            //         id: 2,
+            //         name: 'Ice cream sandwich',
+            //         departments: "MO",
+            //         join_year: 2021,
+            //     },
+            //     {
+            //         id: 3,
+            //         name: 'Eclair',
+            //         departments: "IT",
+            //         join_year: 2023,
+            //     },
+            //     {
+            //         id: 4,
+            //         name: 'Cupcake',
+            //         departments: "Designer",
+            //         join_year: 2023,
+            //     },
+            //     {
+            //         id: 5,
+            //         name: 'Gingerbread',
+            //         departments: "MO",
+            //         join_year: 2022,
+            //     },
+            //     {
+            //         id: 6,
+            //         name: 'Jelly bean',
+            //         departments: "IT",
+            //         join_year: 2020,
+            //     },
+            //     {
+            //         id: 7,
+            //         name: 'Lollipop',
+            //         departments: "Designer",
+            //         join_year: 2021,
+            //     },
+            //     {
+            //         id: 8,
+            //         name: 'Honeycomb',
+            //         departments: "IT",
+            //         join_year: 2023,
+            //     },
+            //     {
+            //         id: 9,
+            //         name: 'Donut',
+            //         departments: "IT",
+            //         join_year: 2022,
+            //     },
+            //     {
+            //         id: 10,
+            //         name: 'KitKat',
+            //         departments: "IT",
+            //         join_year: 2022,
+            //     },
+            //     {
+            //         id: 11,
+            //         name: 'Honda',
+            //         departments: "MO",
+            //         join_year: 2022,
+            //     },
+            //     {
+            //         id: 12,
+            //         name: 'Yamaha',
+            //         departments: "Designer",
+            //         join_year: 2022,
+            //     },
+            //     {
+            //         id: 13,
+            //         name: 'Vision',
+            //         departments: "IT",
+            //         join_year: 2022,
+            //     },
+            //     {
+            //         id: 14,
+            //         name: 'Element',
+            //         departments: "MO",
+            //         join_year: 2023,
+            //     },
+            //     {
+            //         id: 15,
+            //         name: 'Panasonic',
+            //         departments: "MO",
+            //         join_year: 2023,
+            //     },
+            //
+            // ],
 
-            ],
-          
         }
     },
     methods: {
+        async getAllUsers() {
+          try {
+            const response = await axios.get(`${this.$config.public.API_BASE_BE}/api/users`);
+            console.log(response.data.users);
+            return (this.users = response.data.users);
+          } catch (error) {
+            return [];
+          }
+        },
         async getAllBill() {
             try {
                 const res = await axios.get(`${this.$config.public.API_BASE_BE}/api/bills`);
@@ -305,6 +315,7 @@ export default {
         },
         handleOpenCreateBill() {
             this.isPopupOpen = true;
+            this.getAllUsers();
             this.bill = {
                 title: '',
                 desc: '',
@@ -396,6 +407,7 @@ export default {
         }
     },
     mounted() {
+
         this.getAllBill();
     },
     computed: {

@@ -62,14 +62,14 @@ onMounted(async () => {
               <label
                 for="email"
                 class="block mb-2 text-sm font-medium text-secondary"
-                >Username</label
+                >Email</label
               >
               <input
                 type="email"
                 name="email"
                 id="email"
                 class="w-full p-2.5 rounded-lg focus:ring-primary-600 focus:border-primary-600 text-secondary"
-                placeholder="Username"
+                placeholder="Email"
                 required
                 v-model="username"
               />

@@ -1,21 +1,16 @@
 <script setup>
 import { routerKey } from 'vue-router';
 import { useSidebarStore } from '@/stores/index.js';
-import { useDecodeTokenStore } from '@/stores/decodeToken.js';
+import { userInfo } from '@/stores/userInfo.js'
+
 
 const store = useSidebarStore();
 const { toggleMenu } = store;
 const is_expanded = computed(() => store.is_expanded);
+const userInfoStore = userInfo()
 
-
-// const decoded = useDecodeTokenStore()
-// decoded.decodeToken
-// console.log('decoded.decodeToken', decoded.decodeToken)
-// console.log('decoded.decoded', decoded.decoded)
-const role_id = 1
-// const role_id = decoded.decoded.role
-// const user_id = decoded.decoded.user_id
-
+const { roles } = userInfoStore.userInfo
+let is_Admin = !!roles.includes("Admin");
 </script>
 
 <script>
@@ -55,7 +50,7 @@ export default {
                 <span class="transition-all text whitespace-nowrap"
                     :class="`${is_expanded ? 'opacity-1' : 'opacity-0'}`">Dashboard</span>
             </Nuxt-link>
-            <Nuxt-link v-if="role_id === 1" to="/admin/user"
+            <Nuxt-link v-if="is_Admin" to="/admin/user"
                 class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white"
                 :class="{ 'router-link-exact-active': $route.path.startsWith('/user') }">
                 <font-awesome-icon :icon="['fas', 'user']"
@@ -88,7 +83,7 @@ export default {
             <ul v-show="isSubMenuVisible && is_expanded" :class="`${is_expanded ? 'opacity-1' : 'opacity-0'}`"
                 class="transition-all">
                 <li>
-                    <Nuxt-link v-if="role_id === 1" to="/monthlyFee"
+                    <Nuxt-link v-if="is_Admin" to="/monthlyFee"
                         class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white">
                         <span class="ml-10">Bill</span>
                     </Nuxt-link>
@@ -98,7 +93,7 @@ export default {
                         </Nuxt-link>
                 </li>
                 <li>
-                    <Nuxt-link v-if="role_id === 1" to="/monthlyFee/list"
+                    <Nuxt-link v-if="is_Admin" to="/monthlyFee/list"
                         :class="{ 'router-link-exact-active': $route.path.startsWith('/money/list') }"
                         class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white">
                         <span class="ml-10">List
@@ -113,7 +108,7 @@ export default {
 
                 </li>
             </ul>
-            <Nuxt-link v-if="role_id === 1" to="/auth/permissionManagement"
+            <Nuxt-link v-if="is_Admin" to="/auth/permissionManagement"
                 class="flex gap-2 px-4 py-2 transition-all button align-center hover:bg-blue-500 hover:text-white">
                 <font-awesome-icon :icon="['fas', 'people-arrows']"
                     class="mr-2 text-[1.5rem] transition-all min-w-[24px] w-[24px]" />

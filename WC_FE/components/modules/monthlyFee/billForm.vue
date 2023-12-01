@@ -44,10 +44,10 @@
                 </v-text-field>
                 <v-data-table v-model="bill.selected" :headers="headers" :items="users" items-per-page="5"
                     select-strategy="all" item-value="id" show-select class="elevation-1" :search="search">
-                    <template v-slot:item.departments="{ value }">
-                        <v-chip :color="getColor(value)">
-                            {{ value }}
-                        </v-chip>
+                    <template v-slot:item.avatar="{ value }">
+                        <v-avatar>
+                            <v-img :src="value"></v-img>
+                        </v-avatar>
                     </template>
                 </v-data-table>
             </template>
@@ -102,12 +102,16 @@ export default {
             years: [],
             headers: [
                 {
+                  title: '',
+                  key: 'avatar',
+                },
+                {
                     title: 'Name',
                     align: 'start',
                     sortable: false,
                     key: 'name',
                 },
-                { title: 'Departments', key: 'departments' },
+                { title: 'Phone', key: 'phone' },
                 { title: 'Join Year', key: 'join_year' },
             ],
         }
