@@ -71,6 +71,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     ->middleware('checkPermission:update_user');
     Route::delete('/users/{id}', [UserController::class, 'deleteById'])
     ->middleware('checkPermission:delete_user');
+    Route::get('/search/{name}', [UserController::class, 'search']);
+    // routes/web.php
 
     // Routes for managing user roles
     Route::middleware('checkPermission:assign_user_roles')->group(function () {
