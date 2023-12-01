@@ -29,34 +29,20 @@ Route::post('/password-reset', [ResetPasswordController::class, 'reset'])->name(
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/bills', [BillController::class, 'getAllBill'])
     ->middleware('checkPermission:read_bill');
-    // Create a new bill
     Route::post('/bills', [BillController::class, 'createBill'])
     ->middleware('checkPermission:create_bill');
-    // Update an existing bill
     Route::put('/bills/{billId}', [BillController::class, 'updateBill'])
     ->middleware('checkPermission:update_bill');
-    // Retrieve a specific bill by ID
     Route::get('/bills/{billId}', [BillController::class, 'getBillById'])
     ->middleware('checkPermission:read_bill');
-    // Delete a specific bill by ID
     Route::delete('/bills/{billId}', [BillController::class, 'deleteBill'])
     ->middleware('checkPermission:delete_bill');
-    // Retrieve paid bills for a specific user
-
 
     Route::get('/payment', [PaymentController::class, 'getPaymentsByUser']);
     Route::post('/payments', [PaymentController::class, 'create']);
-
-    // Get all payments
     Route::get('/payments', [PaymentController::class, 'index']);
-
-    // Get a specific payment by ID
     Route::get('/payments/{id}', [PaymentController::class, 'show']);
-
-    // Update a payment by ID
     Route::put('/payments/{id}', [PaymentController::class, 'update']);
-
-    // Delete a payment by ID
     Route::delete('/payments/{id}', [PaymentController::class, 'destroy']);
 
     Route::get('/users/{userId}/paid-bills', [BillController::class, 'getPaidBillsByUserId']);
