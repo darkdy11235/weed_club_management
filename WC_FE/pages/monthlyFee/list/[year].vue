@@ -1,95 +1,101 @@
 <script setup>
 // import isLogin from "~/stores/isLogin";
-import axios from "axios";
-const route = useRoute();
-const router = useRouter();
+import { axios } from '../../../utils/api/axios'
+const route = useRoute()
+const router = useRouter()
 
-const config = useRuntimeConfig();
-const API_BE = config.public.API_BASE_BE;
+const config = useRuntimeConfig()
+const API_BE = config.public.API_BASE_BE
 
-const yearParam = route.params.year;
+const yearParam = route.params
 
 definePageMeta({
-  layout: "custom",
-});
+  layout: 'custom',
+})
 
 const months = [
-  "T1",
-  "T2",
-  "T3",
-  "T4",
-  "T5",
-  "T6",
-  "T7",
-  "T8",
-  "T9",
-  "T10",
-  "T11",
-  "T12",
-];
+  'T1',
+  'T2',
+  'T3',
+  'T4',
+  'T5',
+  'T6',
+  'T7',
+  'T8',
+  'T9',
+  'T10',
+  'T11',
+  'T12',
+]
 
-const Data = ref([]);
+const Data = ref([])
 
-const dataYear = ref([]);
+const dataYear = ref([])
 
-const yearSelected = ref('');
+const yearSelected = ref('')
 
 yearSelected.value = yearParam
 
-
 const getYear = async () => {
   try {
-    const url = `${API_BE}/api/v1/statistic/list-year`;
-    const response = await axios.get(url);
+    const url = `${API_BE}/api/v1/statistic/list-year`
+    const response = await axios.get(url)
 
-    return (dataYear.value = response.data);
+    return (dataYear.value = response.data)
   } catch (error) {
-    console.log(error);
-    return [];
+    console.log(error)
+    return []
   }
-};
+}
 
 const fetchData = async (yearr) => {
   try {
-    const url = `${API_BE}/api/v1/statistic/list-money/${yearr}`;
-    const response = await axios.get(url);
-    return (Data.value = response.data);
+    const response = await axios.get(`/get-bills/${yearr}`)
+    return (Data.value = response.data)
   } catch (error) {
-    console.log(error);
-    return [];
+    console.log(error)
+    return []
   }
-};
-
-const onSelectChange = () => {
-  console.log('Selected year:', yearSelected.value);
-  router.push(`/money/list/${yearSelected.value}`);
 }
 
+const onSelectChange = () => {
+  console.log('Selected year:', yearSelected.value)
+  router.push(`/money/list/${yearSelected.value}`)
+}
 
 onMounted(() => {
-
   // isLogin();
-  getYear();
-  if (yearParam) {
-    fetchData(yearParam);
+  getYear()
+  if (yearParam.year) {
+    fetchData(yearParam.year)
   }
-});
+})
 </script>
 
 <template>
   <div class="bg-white">
     <div class="limiter">
       <div class="relative flex items-center h-12 mt-8 w-36">
-        <font-awesome-icon :icon="['fas', 'chevron-down']" class="absolute right-2" />
+        <font-awesome-icon
+          :icon="['fas', 'chevron-down']"
+          class="absolute right-2"
+        />
 
-        <select id="countries"
-          class="w-full h-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          v-model="yearSelected" @change="onSelectChange">
+        <select
+          id="countries"
+          class="w-full h-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          v-model="yearSelected"
+          @change="onSelectChange"
+        >
           <!-- <option selected></option> -->
-          <option v-for="year in dataYear" :key="year" :value="year" :selected="year == yearParam">
+          <option
+            v-for="year in dataYear"
+            :key="year"
+            :value="year"
+            :selected="year == yearParam"
+          >
             {{ year }}
           </option>
-
         </select>
       </div>
       <div class="container-table100">
@@ -102,21 +108,27 @@ onMounted(() => {
                     <tr class="row100 head">
                       <th class="cell100 column6">STT</th>
                       <th class="text-left cell100 column2">Họ và tên</th>
-                      <th class="text-left cell100 column2">Chuyên môn</th>
                       <!-- <th class="cell100 column3">Khóa</th> -->
-                      <th class="cell100 column4">Số tháng nợ</th>
                       <th class="pl-4 cell100 column8">
                         <p>Năm</p>
-                    <tr class="flex justify-around">
-                      <td class="pt-2 pb-0" v-for="month in months" :key="month">
-                        <p class="text-black">{{ month }}</p>
-                      </td>
-                    </tr>
-                    </th>
+                        <tr class="flex justify-around">
+                          <td
+                            class="pt-2 pb-0"
+                            v-for="month in months"
+                            :key="month"
+                          >
+                            <p class="text-black">{{ month }}</p>
+                          </td>
+                        </tr>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="row100 body" v-for="user in Data" :key="user.id_user">
+                    <tr
+                      class="row100 body"
+                      v-for="user in Data"
+                      :key="user.id_user"
+                    >
                       <td class="text-center cell100 column6">
                         {{ user.id_user }}
                       </td>
@@ -241,7 +253,7 @@ iframe {
 }
 
 .table100 .ps__rail-x::before {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   background-color: #e6e6e6;
@@ -259,7 +271,7 @@ iframe {
 }
 
 .table100 .ps__rail-x .ps__thumb-x::before {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   background-color: #b3b3b3;

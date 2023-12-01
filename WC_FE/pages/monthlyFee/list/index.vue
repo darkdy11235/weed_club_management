@@ -1,50 +1,52 @@
 <script setup>
 // import isLogin from "~/stores/isLogin";
-import axios from "axios";
-const router = useRouter();
+import axios from 'axios'
+const router = useRouter()
 
-const config = useRuntimeConfig();
-const API_BE = config.public.API_BASE_BE;
+const config = useRuntimeConfig()
+const API_BE = config.public.API_BASE_BE
 
-const route = useRoute();
-const yearParam = route.params.year;
+const route = useRoute()
+const yearParam = route.params.year
 
 definePageMeta({
-  layout: "custom",
-});
+  layout: 'custom',
+})
 
 const months = [
-  "T1",
-  "T2",
-  "T3",
-  "T4",
-  "T5",
-  "T6",
-  "T7",
-  "T8",
-  "T9",
-  "T10",
-  "T11",
-  "T12",
-];
+  'T1',
+  'T2',
+  'T3',
+  'T4',
+  'T5',
+  'T6',
+  'T7',
+  'T8',
+  'T9',
+  'T10',
+  'T11',
+  'T12',
+]
 
-const Data = ref([]);
+const Data = ref([])
 
-const dataYear = ref([]);
+const dataYear = ref([])
 
-const yearSelected = ref('Chọn năm: ');
+const mockDataYear = ['2023', '2024']
+
+const yearSelected = ref('Chọn năm: ')
 
 const getYear = async () => {
   try {
-    const url = `${API_BE}/api/v1/statistic/list-year`;
-    const response = await axios.get(url);
+    const url = `${API_BE}/api/v1/statistic/list-year`
+    const response = await axios.get(url)
 
-    return (dataYear.value = ['Chọn năm: ', ...response.data]);
+    return (dataYear.value = ['Chọn năm: ', ...response.data])
   } catch (error) {
-    console.log(error);
-    return [];
+    console.log(error)
+    return []
   }
-};
+}
 
 // const fetchData = async (yearr) => {
 //   try {
@@ -60,35 +62,46 @@ const getYear = async () => {
 // };
 
 const onSelectChange = () => {
-  console.log('Selected year:', yearSelected.value);
-  router.push(`/money/list/${yearSelected.value}`);
+  console.log('Selected year:', yearSelected.value)
+  router.push(`/monthlyFee/list/${yearSelected.value}`)
 }
 
-
 onMounted(() => {
-
   // isLogin();
-  getYear();
+  getYear()
   // console.log("year", yearParam);
   // if (1) {
   //   fetchData(yearParam);
   // }
-});
+})
 </script>
 
 <template>
   <div class="bg-white">
     <div class="limiter">
-      <div class="relative flex items-center  border-2 !rounded-sm  mt-8 w-[150px] h-12">
-        <font-awesome-icon :icon="['fas', 'chevron-down']" class="absolute right-2" />
+      <div
+        class="relative flex items-center border-2 !rounded-sm mt-8 w-[150px] h-12"
+      >
+        <font-awesome-icon
+          :icon="['fas', 'chevron-down']"
+          class="absolute right-2"
+        />
 
-        <select id="countries" class="w-full h-full pl-[3px] !rounded-sm  " v-model="yearSelected"
-          @change="onSelectChange">
-
-          <option v-for="year in dataYear" :key="year" :value="year" :disabled="year === 'Chọn năm: '" class="!pl-4 ">
+        <select
+          id="countries"
+          class="w-full h-full pl-[3px] !rounded-sm"
+          v-model="yearSelected"
+          @change="onSelectChange"
+        >
+          <option
+            v-for="year in mockDataYear"
+            :key="year"
+            :value="year"
+            :disabled="year === 'Chọn năm: '"
+            class="!pl-4"
+          >
             {{ year }}
           </option>
-
         </select>
       </div>
 
@@ -107,16 +120,24 @@ onMounted(() => {
                       <th class="cell100 column4">Số tháng nợ</th>
                       <th class="pl-4 cell100 column8">
                         <p>Năm</p>
-                    <tr class="flex justify-around">
-                      <td class="pt-2 pb-0" v-for="month in months" :key="month">
-                        <p class="text-black">{{ month }}</p>
-                      </td>
-                    </tr>
-                    </th>
+                        <tr class="flex justify-around">
+                          <td
+                            class="pt-2 pb-0"
+                            v-for="month in months"
+                            :key="month"
+                          >
+                            <p class="text-black">{{ month }}</p>
+                          </td>
+                        </tr>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="row100 body" v-for="user in Data" :key="user.id_user">
+                    <tr
+                      class="row100 body"
+                      v-for="user in Data"
+                      :key="user.id_user"
+                    >
                       <td class="text-center cell100 column6">
                         {{ user.id_user }}
                       </td>
@@ -241,7 +262,7 @@ iframe {
 }
 
 .table100 .ps__rail-x::before {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   background-color: #e6e6e6;
@@ -259,7 +280,7 @@ iframe {
 }
 
 .table100 .ps__rail-x .ps__thumb-x::before {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   background-color: #b3b3b3;
